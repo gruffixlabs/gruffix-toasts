@@ -1,7 +1,7 @@
 # GruffixToasts
 
-App-wide toast messages for SwiftUI on iOS 17, macOS 14, tvOS 17 and watchOS 10 and later, with four styles (Glass Capsule, Banner, Snackbar, Deck), stack or
-queue presentation, swipe to dismiss, haptics and VoiceOver announcements.
+App-wide toast messages for SwiftUI on iOS 17, macOS 14, tvOS 17 and watchOS 10 and later, with four styles (Glass
+Capsule, Banner, Snackbar, Deck), stack or queue presentation, swipe to dismiss, haptics and VoiceOver announcements.
 
 ## Usage
 
