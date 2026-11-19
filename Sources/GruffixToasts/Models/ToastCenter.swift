@@ -9,11 +9,18 @@ public final class ToastCenter {
     /// The most recently presented toast; drives haptics without re-firing when older toasts leave.
     public private(set) var lastShown: Toast?
     public let tuning: ToastTuning
+    /// Suspends for a duration. Injected so tests can drive timers without waiting in real time.
+    private let sleep: (Duration) async throws -> Void
 
     @ObservationIgnored private var timers: [Toast.ID: Task<Void, Never>] = [:]
 
-    public init(tuning: ToastTuning = ToastTuning()) {
+    public convenience init(tuning: ToastTuning = ToastTuning()) {
+        self.init(tuning: tuning, sleep: { try await Task.sleep(for: $0) })
+    }
+
+    init(tuning: ToastTuning, sleep: @escaping (Duration) async throws -> Void) {
         self.tuning = tuning
+        self.sleep = sleep
     }
 
     public func show(_ toast: Toast) {
@@ -34,11 +41,11 @@ public final class ToastCenter {
 
     /// Shows several toasts in order, separated by the tuning stagger.
     public func show(_ toasts: [Toast]) {
-        Task { [weak self] in
+        Task { [weak self, sleep] in
             for (index, toast) in toasts.enumerated() {
                 if index > 0, let stagger = self?.tuning.staggerSeconds {
                     do {
-                        try await Task.sleep(for: .seconds(stagger))
+                        try await sleep(.seconds(stagger))
                     } catch {
                         return
                     }
@@ -85,10 +92,10 @@ public final class ToastCenter {
     }
 
     private func presentNextQueued() {
-        Task { [weak self] in
+        Task { [weak self, sleep] in
             guard let gap = self?.tuning.queueGapSeconds else { return }
             do {
-                try await Task.sleep(for: .seconds(gap))
+                try await sleep(.seconds(gap))
             } catch {
                 return
             }
@@ -100,9 +107,9 @@ public final class ToastCenter {
     private func scheduleTimer(for toast: Toast) {
         guard let seconds = tuning.seconds(for: toast) else { return }
         timers[toast.id]?.cancel()
-        timers[toast.id] = Task { [weak self] in
+        timers[toast.id] = Task { [weak self, sleep] in
             do {
-                try await Task.sleep(for: .seconds(seconds))
+                try await sleep(.seconds(seconds))
             } catch {
                 // Cancelled because the toast was dismissed or paused.
                 return
