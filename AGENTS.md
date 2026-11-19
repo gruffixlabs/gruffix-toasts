@@ -2,12 +2,13 @@
 
 ## Context and documentation
 
-- The DocC catalog, `Sources/GruffixToasts/GruffixToasts.docc/`, is the single source of documentation for library consumers and contributors, and is published to GitHub Pages. At the start of every session, read its landing page, `GruffixToasts.md`, if it exists, then read the articles relevant to the task. Do not duplicate explanations already in code comments.
-- `scratchpad/README.md` indexes working designs and possible future work. These documents contain current thinking and open questions, not necessarily approved decisions or implemented behavior.
+- The DocC catalog, `Sources/GruffixToasts/GruffixToasts.docc/`, is the single source of documentation for library consumers and contributors, and is published to GitHub Pages. When a task touches documented behavior, read the relevant articles, starting from the landing page `GruffixToasts.md` if it exists. Do not duplicate explanations already in code comments.
+- Working designs, spike reports and decisions live in `../scratchpad/`, outside the repo and never committed. `../scratchpad/README.md` indexes them. They contain current thinking and open questions, not necessarily approved decisions or implemented behavior. Read only what the task or prompt points to.
+- `../scratchpad/decisions.md` lists decisions, each marked proposed, accepted or superseded. Treat accepted decisions as binding, proposed ones as context and superseded ones as history. If an accepted decision no longer fits the task, flag it and ask rather than working around it.
 - Stories describe intended work. Pull requests and completed stories preserve history. Put lasting explanations in code comments or the appropriate documentation as implementation lands; update or remove obsolete scratchpad material as part of the agreed work.
 - When adding a document, add it to the appropriate index in the same change. For a DocC article, that is a topic group on the landing page.
 - Before writing or changing code, read `.coding-heuristics.md` if it exists. Compare new and modified code against it before handing work over. If it is absent, report that briefly and follow existing code conventions without inventing a replacement.
-- Precedence: explicit user instructions in the current session override this file. Root rules apply everywhere; directory-specific instructions govern their area. Use the DocC catalog for implemented behavior and `scratchpad/` for working designs. All remain subject to the agent platform's higher-priority instructions. If an unresolved conflict materially affects the task, explain it and ask.
+- Precedence: explicit user instructions in the current session override this file. Root rules apply everywhere; directory-specific instructions govern their area. Use the DocC catalog for implemented behavior and `../scratchpad/` for working designs. All remain subject to the agent platform's higher-priority instructions. If an unresolved conflict materially affects the task, explain it and ask.
 
 ## Project baseline
 
@@ -43,7 +44,7 @@ Pick the mode from the task. If unclear, use the lightest plausible mode and sta
 
 1. **Light** (pairing, scaffolding, small edits): touched files are clean in Xcode diagnostics and checked against `.coding-heuristics.md`. Don't build or run tests unless asked.
 2. **Structural** (moving code between targets or packages, writing tests): build all affected targets and run the relevant tests. New tests must run; report failures as findings.
-3. **Feature** (delegated stories): full build and test suite, plus a list of manual checks for anything not automated. Check-in rules: TBD.
+3. **Feature** (delegated stories): full build and test suite, plus a list of manual checks for anything not automated. Done when it meets the Definition of done below.
 
 Build and test with `xcodebuild` against iOS, not `swift build` or `swift test`, which target the host Mac and fail for this iOS-only package:
 
@@ -56,11 +57,32 @@ Directory-specific instructions may define their own verification mode, which ov
 
 Always report the mode used, what was run, and what was skipped. If verification is unavailable or fails, say so and leave the work marked unverified. Do not claim completion.
 
+## Definition of done
+
+### Feature stories
+
+1. **Acceptance criteria:** every criterion in the story is met, and the pull request description addresses each one.
+2. **Build and tests:** the package builds on every supported platform; the full test suite passes, reported as passed, failed and skipped; new behavior has tests; CI is green once it exists.
+3. **No new warnings:** compiler or DocC.
+4. **Heuristics:** code is checked against `.coding-heuristics.md`, and deviations are explained in the pull request.
+5. **Public API:** changes are listed in the pull request and approved, every `public` symbol has a documentation comment, and the change is classified as patch or minor.
+6. **Docs:** a `CHANGELOG.md` "Unreleased" entry, and DocC updated for user-visible behavior.
+7. **Manual checks:** a list of what wasn't automated, always including VoiceOver and Reduce Motion.
+8. **Pull request:** one branch and pull request per story, targeting `main`, with "Closes #N" in the description and no links to agent session chats. A human merges.
+9. **Honest status:** anything unverified is listed. A story with unverified items is not done.
+
+### Analysis spikes
+
+1. Every question in the story is answered, and the report is posted on the issue.
+2. No code changes unless the story explicitly pre-approves them.
+3. Recommendations and decisions for the owner are listed separately.
+
 ## You are a guest
 
 ### On the laptop
 
 - Keep project exploration and edits inside the repo. Do not inspect unrelated personal files or change files outside the repo without asking. Normal access to installed SDKs and tools, and their ordinary build caches and temporary files, is allowed.
+- `../scratchpad/` is the only location outside the repo that agents may read and write without asking. It does not widen the attachment rule or any other boundary. Before writing to `../scratchpad/`, read `../scratchpad/AGENTS.md`. When you push a project branch, push `../scratchpad/` at the same time if it is a git repository. Create worktrees of this repo directly under the project root folder, as siblings of `scratchpad/`, so `../scratchpad/` resolves from every worktree.
 - Files the user attaches from outside the repo grant access to those exact files only, not their folder. If they reference other files, ask the user to attach them. Don't list, search or open anything else outside the repo without explicit permission.
 - Clearing build caches is limited to this project's own DerivedData folder and the package's `.build/` folder. Never clear all of DerivedData or other projects' caches.
 - Don't change global or system settings, including shell profiles, `git config --global`, Xcode preferences or system settings.
