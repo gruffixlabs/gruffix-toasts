@@ -1,31 +1,45 @@
 import SwiftUI
 
-/// Prototype knobs for how toasts look, move and time out. Edited live by `ToastTuningPanel`.
+/// How toasts look, move and time out. Observable, so changes made while toasts are showing
+/// take effect live; `ToastTuningPanel` edits it this way.
 @Observable
 public final class ToastTuning {
+    /// The visual style of every toast.
     public var style: ToastStyle
+    /// The screen edge toasts appear at. Defaults to the style's preferred edge.
     public var placement: ToastPlacement
+    /// Whether toasts stack or queue. Defaults to the style's preferred presentation.
     public var presentation: ToastPresentation
+    /// The most toasts on screen at once in stack presentation. Showing another dismisses the oldest.
     public var maxVisible = 3
 
+    /// Seconds an info toast stays on screen.
     public var infoSeconds = 3.0
+    /// Seconds a success toast stays on screen.
     public var successSeconds = 3.0
+    /// Seconds a warning toast stays on screen.
     public var warningSeconds = 5.0
+    /// Seconds an error toast stays on screen when `isErrorSticky` is `false`.
     public var errorSeconds = 6.0
+    /// Whether error toasts stay on screen, with a close button, until dismissed.
     public var isErrorSticky = true
-    /// Extra time given to toasts with an action so there's a chance to tap it.
+    /// Extra seconds given to toasts with an action so there's a chance to tap it.
     public var actionBonusSeconds = 2.0
 
+    /// The spring used to animate toasts in and out.
     public var springPreset = SpringPreset.snappy
+    /// The spring response, in seconds, when `springPreset` is ``SpringPreset/custom``.
     public var customResponse = 0.4
+    /// The spring damping fraction when `springPreset` is ``SpringPreset/custom``.
     public var customDamping = 0.75
-    /// Delay between toasts fired together as a burst.
+    /// Seconds between toasts passed together to `ToastCenter.show(_:)` as an array.
     public var staggerSeconds = 0.15
-    /// Pause between queued toasts so each exit reads before the next entrance.
+    /// Seconds between queued toasts so each exit reads before the next entrance.
     public var queueGapSeconds = 0.25
+    /// Points a toast must be dragged toward its edge to dismiss it; sideways drags need twice this.
     public var swipeThreshold = 50.0
 
-    public var animation: Animation {
+    var animation: Animation {
         switch springPreset {
         case .snappy: .snappy
         case .bouncy: .bouncy(duration: 0.5, extraBounce: 0.1)
@@ -34,6 +48,8 @@ public final class ToastTuning {
         }
     }
 
+    /// Creates tuning for a style, using that style's default placement and presentation.
+    /// - Parameter style: The visual style of every toast.
     public init(style: ToastStyle = .glassCapsule) {
         self.style = style
         placement = style.defaultPlacement
@@ -41,7 +57,7 @@ public final class ToastTuning {
     }
 
     /// Seconds before `toast` auto-dismisses, or `nil` if it stays until dismissed.
-    public func seconds(for toast: Toast) -> Double? {
+    func seconds(for toast: Toast) -> Double? {
         let base: Double
         switch toast.severity {
         case .info: base = infoSeconds
@@ -54,38 +70,41 @@ public final class ToastTuning {
         return toast.action == nil ? base : base + actionBonusSeconds
     }
 
-    public func applyDefaults(for style: ToastStyle) {
+    func applyDefaults(for style: ToastStyle) {
         placement = style.defaultPlacement
         presentation = style.defaultPresentation
     }
 }
 
+/// The screen edge toasts appear at.
 public enum ToastPlacement: CaseIterable, Hashable {
+    /// Toasts appear at the top of the screen.
     case top
+    /// Toasts appear at the bottom of the screen.
     case bottom
 
-    public var name: String {
+    var name: String {
         switch self {
         case .top: "Top"
         case .bottom: "Bottom"
         }
     }
 
-    public var edge: Edge {
+    var edge: Edge {
         switch self {
         case .top: .top
         case .bottom: .bottom
         }
     }
 
-    public var alignment: Alignment {
+    var alignment: Alignment {
         switch self {
         case .top: .top
         case .bottom: .bottom
         }
     }
 
-    public var anchor: UnitPoint {
+    var anchor: UnitPoint {
         switch self {
         case .top: .top
         case .bottom: .bottom
@@ -93,13 +112,14 @@ public enum ToastPlacement: CaseIterable, Hashable {
     }
 }
 
+/// How toasts share the screen.
 public enum ToastPresentation: CaseIterable, Hashable {
     /// Several toasts on screen at once, newest closest to the edge.
     case stack
     /// One toast at a time; the rest wait their turn.
     case queue
 
-    public var name: String {
+    var name: String {
         switch self {
         case .stack: "Stack"
         case .queue: "Queue"
@@ -107,13 +127,18 @@ public enum ToastPresentation: CaseIterable, Hashable {
     }
 }
 
+/// The spring used to animate toasts.
 public enum SpringPreset: CaseIterable, Hashable {
+    /// A quick spring with no bounce.
     case snappy
+    /// A spring with a little bounce.
     case bouncy
+    /// A gentle spring with no bounce.
     case smooth
+    /// A spring built from `ToastTuning.customResponse` and `ToastTuning.customDamping`.
     case custom
 
-    public var name: String {
+    var name: String {
         switch self {
         case .snappy: "Snappy"
         case .bouncy: "Bouncy"
