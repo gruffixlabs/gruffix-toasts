@@ -62,9 +62,9 @@ struct ToastPlayground: View {
     ]
 }
 
-/// Buttons that fire sample toasts via `@Environment(ToastCenter.self)`.
+/// Buttons that fire sample toasts via `@Environment(\.toastCenter)`.
 private struct ToastTriggerSection: View {
-    @Environment(ToastCenter.self) private var toasts
+    @Environment(\.toastCenter) private var toasts
 
     var body: some View {
         Section("Fire toasts") {

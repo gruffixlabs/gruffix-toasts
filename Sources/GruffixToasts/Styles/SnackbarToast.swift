@@ -13,10 +13,10 @@ struct SnackbarToast: View {
                 .foregroundStyle(toast.severity.tint)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(toast.title)
+                Text(toast.text)
                     .font(.subheadline.weight(.medium))
-                if let message = toast.message {
-                    Text(message)
+                if let detail = toast.detail {
+                    Text(detail)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

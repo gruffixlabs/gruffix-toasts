@@ -4,7 +4,7 @@ import SwiftUI
 /// and dragging away from the edge is rubber-banded.
 struct SwipeToDismissModifier: ViewModifier {
     let toastId: Toast.ID
-    @Environment(ToastCenter.self) private var center
+    @Environment(\.toastCenter) private var center
     @State private var offset: CGSize = .zero
     @State private var isDragging = false
 

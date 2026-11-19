@@ -1,14 +1,20 @@
 import SwiftUI
 
-/// The visual variations being compared. Each has its own default placement and presentation,
-/// which the tuning panel can override.
+/// How toasts look. Each style has a default placement and presentation, which
+/// `ToastTuning` can override.
 public enum ToastStyle: CaseIterable, Hashable {
+    /// A compact capsule with Liquid Glass on iOS 26 and later, or a tinted material before.
+    /// Defaults to the top edge, stacked.
     case glassCapsule
+    /// A full-width card with a tinted leading stripe. Defaults to the top edge, stacked.
     case banner
+    /// A compact dark bar. Defaults to the bottom edge, queued.
     case snackbar
+    /// Cards that pile up behind the newest and expand into a list when tapped. Defaults to the
+    /// bottom edge, stacked.
     case deck
 
-    public var name: String {
+    var name: String {
         switch self {
         case .glassCapsule: "Glass Capsule"
         case .banner: "Banner"
@@ -17,14 +23,14 @@ public enum ToastStyle: CaseIterable, Hashable {
         }
     }
 
-    public var defaultPlacement: ToastPlacement {
+    var defaultPlacement: ToastPlacement {
         switch self {
         case .glassCapsule, .banner: .top
         case .snackbar, .deck: .bottom
         }
     }
 
-    public var defaultPresentation: ToastPresentation {
+    var defaultPresentation: ToastPresentation {
         switch self {
         case .snackbar: .queue
         case .glassCapsule, .banner, .deck: .stack

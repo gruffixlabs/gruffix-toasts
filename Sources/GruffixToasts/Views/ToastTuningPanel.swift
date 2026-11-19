@@ -1,13 +1,17 @@
 import SwiftUI
 
-/// Live controls for `ToastTuning`. Sits beside the playground in wide previews, or in a sheet.
+/// A form of live controls for `ToastTuning`, for trying styles, timing and motion in a debug
+/// screen or sheet.
 public struct ToastTuningPanel: View {
     @Bindable var tuning: ToastTuning
 
+    /// Creates a panel that edits `tuning` in place.
+    /// - Parameter tuning: The tuning to edit, usually the `ToastCenter`'s.
     public init(tuning: ToastTuning) {
         self.tuning = tuning
     }
 
+    /// The panel's form.
     public var body: some View {
         Form {
             Section("Look") {

@@ -21,10 +21,13 @@ var body: some View {
 ```
 
 ```swift
-@Environment(ToastCenter.self) private var toasts
+@Environment(\.toastCenter) private var toasts
 
-toasts.show(Toast(.success, "Document saved", message: "Quarterly Report"))
+toasts.success("Document saved", detail: "Quarterly Report")
+toasts.error(error, action: ToastAction(label: "Retry") { save() })
 ```
+
+`info`, `success`, `warning` and `error` each have a shortcut; `show(_:)` takes a `Toast` you build yourself.
 
 `ToastTuning` controls style, placement, durations and motion. `ToastTuningPanel` edits it live.
 
