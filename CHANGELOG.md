@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Removed
 
+- `ToastTuningPanel` moved out of the library into the demo app in `Demo/`.
 - Implementation details are no longer public: `ToastCenter.visible`, `pending`, `lastShown`, `pauseTimer(for:)` and `resumeTimer(for:)`; `ToastTuning.animation`, `seconds(for:)` and `applyDefaults(for:)`; `ToastSeverity.name`, `symbol`, `tint` and `feedback`; `ToastStyle.name`, `defaultPlacement` and `defaultPresentation`; `ToastPlacement.name`, `edge`, `alignment` and `anchor`; `ToastPresentation.name`; and `SpringPreset.name`.
 
 ### Changed

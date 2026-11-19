@@ -14,15 +14,6 @@ public enum ToastStyle: CaseIterable, Hashable {
     /// bottom edge, stacked.
     case deck
 
-    var name: String {
-        switch self {
-        case .glassCapsule: "Glass Capsule"
-        case .banner: "Banner"
-        case .snackbar: "Snackbar"
-        case .deck: "Deck"
-        }
-    }
-
     var defaultPlacement: ToastPlacement {
         switch self {
         case .glassCapsule, .banner: .top

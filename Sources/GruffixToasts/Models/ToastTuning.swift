@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// How toasts look, move and time out. Observable, so changes made while toasts are showing
-/// take effect live; `ToastTuningPanel` edits it this way.
+/// take effect live.
 @Observable
 public final class ToastTuning {
     /// The visual style of every toast.
@@ -69,11 +69,6 @@ public final class ToastTuning {
         }
         return toast.action == nil ? base : base + actionBonusSeconds
     }
-
-    func applyDefaults(for style: ToastStyle) {
-        placement = style.defaultPlacement
-        presentation = style.defaultPresentation
-    }
 }
 
 /// The screen edge toasts appear at.
@@ -82,13 +77,6 @@ public enum ToastPlacement: CaseIterable, Hashable {
     case top
     /// Toasts appear at the bottom of the screen.
     case bottom
-
-    var name: String {
-        switch self {
-        case .top: "Top"
-        case .bottom: "Bottom"
-        }
-    }
 
     var edge: Edge {
         switch self {
@@ -118,13 +106,6 @@ public enum ToastPresentation: CaseIterable, Hashable {
     case stack
     /// One toast at a time; the rest wait their turn.
     case queue
-
-    var name: String {
-        switch self {
-        case .stack: "Stack"
-        case .queue: "Queue"
-        }
-    }
 }
 
 /// The spring used to animate toasts.
@@ -137,13 +118,4 @@ public enum SpringPreset: CaseIterable, Hashable {
     case smooth
     /// A spring built from `ToastTuning.customResponse` and `ToastTuning.customDamping`.
     case custom
-
-    var name: String {
-        switch self {
-        case .snappy: "Snappy"
-        case .bouncy: "Bouncy"
-        case .smooth: "Smooth"
-        case .custom: "Custom"
-        }
-    }
 }

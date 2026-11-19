@@ -1,5 +1,5 @@
-#if DEBUG
 import SwiftUI
+import GruffixToasts
 
 /// A fake app screen for trying toasts. Trigger buttons reach the center through the
 /// environment, the same way real feature views would.
@@ -35,13 +35,13 @@ struct ToastPlayground: View {
                     }
                 }
             }
-            .navigationTitle(center.tuning.style.name)
+            .navigationTitle(center.tuning.style.displayName)
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
+                ToolbarItem(placement: .cancellationAction) {
                     Button("Dismiss All", systemImage: "xmark.circle") { center.dismissAll() }
                 }
                 if !showsTuningPanel {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .primaryAction) {
                         Button("Tune", systemImage: "slider.horizontal.3") { showTuningSheet = true }
                     }
                 }
@@ -83,6 +83,7 @@ private struct ToastTriggerSection: View {
     }
 }
 
+#if DEBUG
 #Preview {
     ToastPlayground()
 }
