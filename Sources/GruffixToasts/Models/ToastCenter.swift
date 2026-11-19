@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// App-wide owner of toast state. Put it in the environment with `.toastHost(_:)` and read it
-/// from any view with `@Environment(ToastCenter.self)`.
+/// from any view with `@Environment(\.toastCenter)`.
 @Observable
 public final class ToastCenter {
     private(set) var visible: [Toast] = []
