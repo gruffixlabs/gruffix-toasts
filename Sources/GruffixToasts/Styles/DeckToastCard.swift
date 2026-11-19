@@ -37,7 +37,7 @@ struct DeckToastCard: View {
                     dismiss()
                 }
                 .font(.subheadline.weight(.semibold))
-                .buttonStyle(.glass)
+                .toastGlassButtonStyle(isProminent: false)
             }
 
             if showsClose {
@@ -46,7 +46,7 @@ struct DeckToastCard: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .glassEffect(.regular, in: .rect(cornerRadius: 22))
+        .toastGlass(tint: nil, isInteractive: false, in: .rect(cornerRadius: 22))
     }
 }
 

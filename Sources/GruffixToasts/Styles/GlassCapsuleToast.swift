@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Compact Liquid Glass capsule, meant to sit just below the Dynamic Island.
+/// Compact Liquid Glass capsule, meant to sit just below the Dynamic Island. Before iOS 26 it's
+/// a tinted material capsule instead.
 struct GlassCapsuleToast: View {
     let toast: Toast
     let showsClose: Bool
@@ -29,7 +30,7 @@ struct GlassCapsuleToast: View {
                     dismiss()
                 }
                 .font(.subheadline.weight(.semibold))
-                .buttonStyle(.glassProminent)
+                .toastGlassButtonStyle(isProminent: true)
                 .tint(toast.severity.tint)
             }
 
@@ -40,7 +41,7 @@ struct GlassCapsuleToast: View {
         .padding(.vertical, 10)
         .padding(.leading, 16)
         .padding(.trailing, showsClose || toast.action != nil ? 8 : 18)
-        .glassEffect(.regular.tint(toast.severity.tint.opacity(0.12)).interactive(), in: .capsule)
+        .toastGlass(tint: toast.severity.tint.opacity(0.12), isInteractive: true, in: .capsule)
     }
 }
 

@@ -30,7 +30,11 @@ struct ToastLayer: View {
     private var content: some View {
         switch tuning.style {
         case .glassCapsule:
-            GlassEffectContainer(spacing: 12) { stack }
+            if #available(iOS 26, *) {
+                GlassEffectContainer(spacing: 12) { stack }
+            } else {
+                stack
+            }
         case .banner, .snackbar:
             stack
         case .deck:

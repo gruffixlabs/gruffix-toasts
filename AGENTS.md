@@ -15,7 +15,7 @@
 - This is a Swift package that ships the `GruffixToasts` library. There is no Xcode project. Source lives in `Sources/GruffixToasts/`, tests in `Tests/GruffixToastsTests/`.
 - Swift tools 6.2, Swift 6 language mode with complete strict concurrency checking.
 - Target Swift settings in `Package.swift`: default `MainActor` isolation, `NonisolatedNonsendingByDefault` and `InferIsolatedConformances`. Code is written against these; don't work around them.
-- Minimum deployment targets: iOS 27.0.
+- Minimum deployment targets: iOS 17.0.
 - Do not use APIs unavailable on these targets without an availability check.
 
 ## Hard rules
