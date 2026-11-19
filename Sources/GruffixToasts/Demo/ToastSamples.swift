@@ -6,18 +6,18 @@ import Foundation
 /// These are computed so each use gets a fresh `id`; showing the same sample twice must not
 /// produce two toasts with one identity.
 enum ToastSamples {
-    static var downloadStarted: Toast { Toast(.info, "Download started", message: "3 files, 24 MB") }
-    static var documentSaved: Toast { Toast(.success, "Document saved", message: "Quarterly Report") }
+    static var downloadStarted: Toast { Toast(.info, "Download started", detail: "3 files, 24 MB") }
+    static var documentSaved: Toast { Toast(.success, "Document saved", detail: "Quarterly Report") }
     static var favoriteAdded: Toast { Toast(.success, "Added to Favorites") }
-    static var lowStorage: Toast { Toast(.warning, "Storage almost full", message: "Less than 1 GB available.") }
+    static var lowStorage: Toast { Toast(.warning, "Storage almost full", detail: "Less than 1 GB available.") }
     static var itemRestored: Toast { Toast(.info, "Item restored") }
-    static var syncError: Toast { Toast(.error, "Sync paused", message: "Changes are saved on this device.") }
+    static var syncError: Toast { Toast(.error, "Sync paused", detail: "Changes are saved on this device.") }
 
     static var longText: Toast {
         Toast(
             .warning,
             "“Quarterly Report – Final Revised Copy (2) – Shared with Finance” has a very long name",
-            message: "Names longer than 48 characters are shortened in lists and menus. You can rename the file from its details screen."
+            detail: "Names longer than 48 characters are shortened in lists and menus. You can rename the file from its details screen."
         )
     }
 
@@ -30,7 +30,7 @@ enum ToastSamples {
         Toast(
             .error,
             "Couldn't save “Quarterly Report”",
-            message: "Your changes are still here.",
+            detail: "Your changes are still here.",
             action: ToastAction(label: "Retry", perform: retry)
         )
     }
@@ -39,7 +39,7 @@ enum ToastSamples {
         Toast(
             .success,
             "Item deleted",
-            message: "“Groceries” moved to Trash",
+            detail: "“Groceries” moved to Trash",
             action: ToastAction(label: "Undo", perform: undo)
         )
     }

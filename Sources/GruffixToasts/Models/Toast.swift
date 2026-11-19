@@ -7,23 +7,23 @@ public struct Toast: Identifiable {
     public let id = UUID()
     /// How important the toast is. Sets its icon, tint, haptic and how long it stays on screen.
     public let severity: ToastSeverity
-    /// The main line of text. VoiceOver announces it when the toast appears.
-    public let title: String
-    /// Optional secondary text shown below the title.
-    public let message: String?
+    /// The toast's main text. VoiceOver announces it when the toast appears.
+    public let text: String
+    /// Optional supporting text shown below `text`.
+    public let detail: String?
     /// Optional button shown on the toast.
     public let action: ToastAction?
 
     /// Creates a toast.
     /// - Parameters:
     ///   - severity: How important the toast is.
-    ///   - title: The main line of text.
-    ///   - message: Optional secondary text shown below the title.
+    ///   - text: The toast's main text.
+    ///   - detail: Optional supporting text shown below `text`.
     ///   - action: Optional button shown on the toast. Toasts with an action stay on screen longer.
-    public init(_ severity: ToastSeverity, _ title: String, message: String? = nil, action: ToastAction? = nil) {
+    public init(_ severity: ToastSeverity, _ text: String, detail: String? = nil, action: ToastAction? = nil) {
         self.severity = severity
-        self.title = title
-        self.message = message
+        self.text = text
+        self.detail = detail
         self.action = action
     }
 }

@@ -63,64 +63,64 @@ public final class ToastCenter {
 
     /// Shows an ``ToastSeverity/info`` toast.
     /// - Parameters:
-    ///   - title: The main line of text.
-    ///   - message: Optional secondary text shown below the title.
+    ///   - text: The toast's main text.
+    ///   - detail: Optional supporting text shown below `text`.
     ///   - action: Optional button shown on the toast.
     /// - Returns: The new toast's identifier, for dismissing it early.
     @discardableResult
-    public func info(_ title: String, message: String? = nil, action: ToastAction? = nil) -> Toast.ID {
-        show(.info, title, message: message, action: action)
+    public func info(_ text: String, detail: String? = nil, action: ToastAction? = nil) -> Toast.ID {
+        show(.info, text, detail: detail, action: action)
     }
 
     /// Shows a ``ToastSeverity/success`` toast.
     /// - Parameters:
-    ///   - title: The main line of text.
-    ///   - message: Optional secondary text shown below the title.
+    ///   - text: The toast's main text.
+    ///   - detail: Optional supporting text shown below `text`.
     ///   - action: Optional button shown on the toast.
     /// - Returns: The new toast's identifier, for dismissing it early.
     @discardableResult
-    public func success(_ title: String, message: String? = nil, action: ToastAction? = nil) -> Toast.ID {
-        show(.success, title, message: message, action: action)
+    public func success(_ text: String, detail: String? = nil, action: ToastAction? = nil) -> Toast.ID {
+        show(.success, text, detail: detail, action: action)
     }
 
     /// Shows a ``ToastSeverity/warning`` toast.
     /// - Parameters:
-    ///   - title: The main line of text.
-    ///   - message: Optional secondary text shown below the title.
+    ///   - text: The toast's main text.
+    ///   - detail: Optional supporting text shown below `text`.
     ///   - action: Optional button shown on the toast.
     /// - Returns: The new toast's identifier, for dismissing it early.
     @discardableResult
-    public func warning(_ title: String, message: String? = nil, action: ToastAction? = nil) -> Toast.ID {
-        show(.warning, title, message: message, action: action)
+    public func warning(_ text: String, detail: String? = nil, action: ToastAction? = nil) -> Toast.ID {
+        show(.warning, text, detail: detail, action: action)
     }
 
     /// Shows an ``ToastSeverity/error`` toast.
     /// - Parameters:
-    ///   - title: The main line of text.
-    ///   - message: Optional secondary text shown below the title.
+    ///   - text: The toast's main text.
+    ///   - detail: Optional supporting text shown below `text`.
     ///   - action: Optional button shown on the toast, such as Retry.
     /// - Returns: The new toast's identifier, for dismissing it early.
     @discardableResult
-    public func error(_ title: String, message: String? = nil, action: ToastAction? = nil) -> Toast.ID {
-        show(.error, title, message: message, action: action)
+    public func error(_ text: String, detail: String? = nil, action: ToastAction? = nil) -> Toast.ID {
+        show(.error, text, detail: detail, action: action)
     }
 
     /// Shows an ``ToastSeverity/error`` toast describing `error`.
     ///
-    /// The title is the error's `localizedDescription`. Without a `message`, the toast shows the
+    /// The text is the error's `localizedDescription`. Without a `detail`, the toast shows the
     /// error's localized recovery suggestion, if it has one, such as `LocalizedError.recoverySuggestion`.
     /// - Parameters:
     ///   - error: The error to describe.
-    ///   - message: Secondary text shown below the title, replacing the recovery suggestion.
+    ///   - detail: Supporting text shown below `text`, replacing the recovery suggestion.
     ///   - action: Optional button shown on the toast, such as Retry.
     /// - Returns: The new toast's identifier, for dismissing it early.
     @discardableResult
-    public func error(_ error: any Error, message: String? = nil, action: ToastAction? = nil) -> Toast.ID {
+    public func error(_ error: any Error, detail: String? = nil, action: ToastAction? = nil) -> Toast.ID {
         let nsError = error as NSError
         return show(
             .error,
             nsError.localizedDescription,
-            message: message ?? nsError.localizedRecoverySuggestion,
+            detail: detail ?? nsError.localizedRecoverySuggestion,
             action: action
         )
     }
@@ -157,8 +157,8 @@ public final class ToastCenter {
         scheduleTimer(for: toast)
     }
 
-    private func show(_ severity: ToastSeverity, _ title: String, message: String?, action: ToastAction?) -> Toast.ID {
-        let toast = Toast(severity, title, message: message, action: action)
+    private func show(_ severity: ToastSeverity, _ text: String, detail: String?, action: ToastAction?) -> Toast.ID {
+        let toast = Toast(severity, text, detail: detail, action: action)
         show(toast)
         return toast.id
     }
@@ -167,7 +167,7 @@ public final class ToastCenter {
         visible.append(toast)
         lastShown = toast
         scheduleTimer(for: toast)
-        AccessibilityNotification.Announcement(toast.title).post()
+        AccessibilityNotification.Announcement(toast.text).post()
     }
 
     private func presentNextQueued() {

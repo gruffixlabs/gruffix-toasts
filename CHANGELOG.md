@@ -8,8 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
-- `ToastCenter.info(_:message:action:)`, `success(_:message:action:)`, `warning(_:message:action:)` and `error(_:message:action:)` show a toast of that severity without building a `Toast`. Each returns the toast's identifier for dismissing it early.
-- `ToastCenter.error(_:message:action:)` also accepts an `Error`, using its localized description as the title and its recovery suggestion, if any, as the message.
+- `ToastCenter.info(_:detail:action:)`, `success(_:detail:action:)`, `warning(_:detail:action:)` and `error(_:detail:action:)` show a toast of that severity without building a `Toast`. Each returns the toast's identifier for dismissing it early.
+- `ToastCenter.error(_:detail:action:)` also accepts an `Error`, using its localized description as the text and its recovery suggestion, if any, as the detail.
 
 ### Removed
 
@@ -17,4 +17,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Changed
 
+- Renamed `Toast.title` to `text` and `Toast.message` to `detail`, including the `message:` label in `Toast.init`, which is now `detail:`.
 - Lowered the minimum deployment target from iOS 27.0 to iOS 17.0. Before iOS 26, the Glass Capsule and Deck styles use a tinted material instead of Liquid Glass.

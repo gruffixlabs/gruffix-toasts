@@ -16,15 +16,15 @@ struct DeckToastCard: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text(toast.title)
+                    Text(toast.text)
                         .font(.subheadline.weight(.semibold))
                     Spacer(minLength: 8)
                     Text("now")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
-                if let message = toast.message {
-                    Text(message)
+                if let detail = toast.detail {
+                    Text(detail)
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

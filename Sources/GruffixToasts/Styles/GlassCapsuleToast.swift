@@ -14,10 +14,10 @@ struct GlassCapsuleToast: View {
                 .foregroundStyle(toast.severity.tint)
 
             VStack(alignment: .leading, spacing: 1) {
-                Text(toast.title)
+                Text(toast.text)
                     .font(.subheadline.weight(.semibold))
-                if let message = toast.message {
-                    Text(message)
+                if let detail = toast.detail {
+                    Text(detail)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

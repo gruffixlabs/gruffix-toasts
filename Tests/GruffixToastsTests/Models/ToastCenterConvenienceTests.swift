@@ -15,23 +15,23 @@ struct ToastCenterConvenienceTests {
 
     @Test(arguments: ToastSeverity.allCases)
     func showsTitleOnlyToastForEachSeverity(_ severity: ToastSeverity) throws {
-        let id = show(severity, "Title", message: nil, action: nil)
+        let id = show(severity, "Text", detail: nil, action: nil)
 
         let toast = try #require(center.visible.only)
         #expect(toast.id == id)
         #expect(toast.severity == severity)
-        #expect(toast.title == "Title")
-        #expect(toast.message == nil)
+        #expect(toast.text == "Text")
+        #expect(toast.detail == nil)
         #expect(toast.action == nil)
     }
 
     @Test(arguments: ToastSeverity.allCases)
-    func passesMessageAndActionForEachSeverity(_ severity: ToastSeverity) throws {
+    func passesDetailAndActionForEachSeverity(_ severity: ToastSeverity) throws {
         var didPerform = false
-        show(severity, "Title", message: "Message", action: ToastAction(label: "Undo") { didPerform = true })
+        show(severity, "Text", detail: "Detail", action: ToastAction(label: "Undo") { didPerform = true })
 
         let toast = try #require(center.visible.only)
-        #expect(toast.message == "Message")
+        #expect(toast.detail == "Detail")
         let action = try #require(toast.action)
         #expect(action.label == "Undo")
         action.perform()
@@ -51,34 +51,34 @@ struct ToastCenterConvenienceTests {
 
         let toast = try #require(center.visible.only)
         #expect(toast.severity == .error)
-        #expect(toast.title == "Upload failed")
-        #expect(toast.message == "Check your connection.")
+        #expect(toast.text == "Upload failed")
+        #expect(toast.detail == "Check your connection.")
     }
 
-    @Test func errorMessageReplacesRecoverySuggestion() throws {
-        center.error(SampleError(), message: "Try again later.", action: ToastAction(label: "Retry") {})
+    @Test func errorDetailReplacesRecoverySuggestion() throws {
+        center.error(SampleError(), detail: "Try again later.", action: ToastAction(label: "Retry") {})
 
         let toast = try #require(center.visible.only)
-        #expect(toast.message == "Try again later.")
+        #expect(toast.detail == "Try again later.")
         #expect(toast.action?.label == "Retry")
     }
 
-    @Test func errorWithoutLocalizationHasNoMessage() throws {
+    @Test func errorWithoutLocalizationHasNoDetail() throws {
         let error = PlainError()
         center.error(error)
 
         let toast = try #require(center.visible.only)
-        #expect(toast.title == error.localizedDescription)
-        #expect(toast.message == nil)
+        #expect(toast.text == error.localizedDescription)
+        #expect(toast.detail == nil)
     }
 
     @discardableResult
-    private func show(_ severity: ToastSeverity, _ title: String, message: String?, action: ToastAction?) -> Toast.ID {
+    private func show(_ severity: ToastSeverity, _ text: String, detail: String?, action: ToastAction?) -> Toast.ID {
         switch severity {
-        case .info: center.info(title, message: message, action: action)
-        case .success: center.success(title, message: message, action: action)
-        case .warning: center.warning(title, message: message, action: action)
-        case .error: center.error(title, message: message, action: action)
+        case .info: center.info(text, detail: detail, action: action)
+        case .success: center.success(text, detail: detail, action: action)
+        case .warning: center.warning(text, detail: detail, action: action)
+        case .error: center.error(text, detail: detail, action: action)
         }
     }
 }

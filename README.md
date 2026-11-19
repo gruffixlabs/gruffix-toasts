@@ -23,7 +23,7 @@ var body: some View {
 ```swift
 @Environment(ToastCenter.self) private var toasts
 
-toasts.success("Document saved", message: "Quarterly Report")
+toasts.success("Document saved", detail: "Quarterly Report")
 toasts.error(error, action: ToastAction(label: "Retry") { save() })
 ```
 
