@@ -1,0 +1,81 @@
+import SwiftUI
+
+/// Live controls for `ToastTuning`. Sits beside the playground in wide previews, or in a sheet.
+public struct ToastTuningPanel: View {
+    @Bindable var tuning: ToastTuning
+
+    public init(tuning: ToastTuning) {
+        self.tuning = tuning
+    }
+
+    public var body: some View {
+        Form {
+            Section("Look") {
+                Picker("Style", selection: $tuning.style) {
+                    ForEach(ToastStyle.allCases, id: \.self) { Text($0.name) }
+                }
+                Picker("Placement", selection: $tuning.placement) {
+                    ForEach(ToastPlacement.allCases, id: \.self) { Text($0.name) }
+                }
+                .pickerStyle(.segmented)
+            }
+
+            Section("Presentation") {
+                Picker("Mode", selection: $tuning.presentation) {
+                    ForEach(ToastPresentation.allCases, id: \.self) { Text($0.name) }
+                }
+                .pickerStyle(.segmented)
+                Stepper("Max visible: \(tuning.maxVisible)", value: $tuning.maxVisible, in: 1...6)
+                    .disabled(tuning.presentation == .queue)
+                slider("Queue gap", value: $tuning.queueGapSeconds, in: 0...1)
+                slider("Burst stagger", value: $tuning.staggerSeconds, in: 0...0.6)
+            }
+
+            Section("Durations") {
+                slider("Info", value: $tuning.infoSeconds, in: 1...10)
+                slider("Success", value: $tuning.successSeconds, in: 1...10)
+                slider("Warning", value: $tuning.warningSeconds, in: 1...10)
+                Toggle("Errors stay until dismissed", isOn: $tuning.isErrorSticky)
+                if !tuning.isErrorSticky {
+                    slider("Error", value: $tuning.errorSeconds, in: 1...15)
+                }
+                slider("Action bonus", value: $tuning.actionBonusSeconds, in: 0...5)
+            }
+
+            Section("Motion") {
+                Picker("Spring", selection: $tuning.springPreset) {
+                    ForEach(SpringPreset.allCases, id: \.self) { Text($0.name) }
+                }
+                .pickerStyle(.segmented)
+                if tuning.springPreset == .custom {
+                    slider("Response", value: $tuning.customResponse, in: 0.1...1.2)
+                    slider("Damping", value: $tuning.customDamping, in: 0.3...1)
+                }
+                LabeledContent("Swipe threshold") {
+                    Slider(value: $tuning.swipeThreshold, in: 20...150)
+                    Text("\(Int(tuning.swipeThreshold)) pt")
+                        .monospacedDigit()
+                        .frame(width: 52, alignment: .trailing)
+                }
+            }
+        }
+        .onChange(of: tuning.style) { _, style in
+            tuning.applyDefaults(for: style)
+        }
+    }
+
+    private func slider(_ title: String, value: Binding<Double>, in range: ClosedRange<Double>) -> some View {
+        LabeledContent(title) {
+            Slider(value: value, in: range)
+            Text(value.wrappedValue, format: .number.precision(.fractionLength(2)))
+                .monospacedDigit()
+                .frame(width: 44, alignment: .trailing)
+        }
+    }
+}
+
+#if DEBUG
+#Preview {
+    ToastTuningPanel(tuning: ToastTuning())
+}
+#endif
