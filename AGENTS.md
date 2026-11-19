@@ -43,7 +43,7 @@ Pick the mode from the task. If unclear, use the lightest plausible mode and sta
 
 1. **Light** (pairing, scaffolding, small edits): touched files are clean in Xcode diagnostics and checked against `.coding-heuristics.md`. Don't build or run tests unless asked.
 2. **Structural** (moving code between targets or packages, writing tests): build all affected targets and run the relevant tests. New tests must run; report failures as findings.
-3. **Feature** (delegated stories): full build and test suite, plus a list of manual checks for anything not automated. Check-in rules: TBD.
+3. **Feature** (delegated stories): full build and test suite, plus a list of manual checks for anything not automated. Done when it meets the Definition of done below.
 
 Build and test with `xcodebuild` against iOS, not `swift build` or `swift test`, which target the host Mac and fail for this iOS-only package:
 
@@ -55,6 +55,26 @@ If a task grows beyond its mode (shared code, public APIs, many files), stop and
 Directory-specific instructions may define their own verification mode, which overrides these defaults within that directory.
 
 Always report the mode used, what was run, and what was skipped. If verification is unavailable or fails, say so and leave the work marked unverified. Do not claim completion.
+
+## Definition of done
+
+### Feature stories
+
+1. **Acceptance criteria:** every criterion in the story is met, and the pull request description addresses each one.
+2. **Build and tests:** the package builds on every supported platform; the full test suite passes, reported as passed, failed and skipped; new behavior has tests; CI is green once it exists.
+3. **No new warnings:** compiler or DocC.
+4. **Heuristics:** code is checked against `.coding-heuristics.md`, and deviations are explained in the pull request.
+5. **Public API:** changes are listed in the pull request and approved, every `public` symbol has a documentation comment, and the change is classified as patch or minor.
+6. **Docs:** a `CHANGELOG.md` "Unreleased" entry, and DocC updated for user-visible behavior.
+7. **Manual checks:** a list of what wasn't automated, always including VoiceOver and Reduce Motion.
+8. **Pull request:** one branch and pull request per story, targeting `main`, with "Closes #N" in the description and no links to agent session chats. A human merges.
+9. **Honest status:** anything unverified is listed. A story with unverified items is not done.
+
+### Analysis spikes
+
+1. Every question in the story is answered, and the report is posted on the issue.
+2. No code changes unless the story explicitly pre-approves them.
+3. Recommendations and decisions for the owner are listed separately.
 
 ## You are a guest
 
