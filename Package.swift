@@ -2,6 +2,12 @@
 
 import PackageDescription
 
+let swiftSettings: [SwiftSetting] = [
+    .defaultIsolation(MainActor.self),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+]
+
 let package = Package(
     name: "GruffixToasts",
     platforms: [.iOS("17.0")],
@@ -11,11 +17,12 @@ let package = Package(
     targets: [
         .target(
             name: "GruffixToasts",
-            swiftSettings: [
-                .defaultIsolation(MainActor.self),
-                .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-                .enableUpcomingFeature("InferIsolatedConformances"),
-            ]
+            swiftSettings: swiftSettings
+        ),
+        .testTarget(
+            name: "GruffixToastsTests",
+            dependencies: ["GruffixToasts"],
+            swiftSettings: swiftSettings
         ),
     ]
 )
