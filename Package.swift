@@ -10,7 +10,7 @@ let swiftSettings: [SwiftSetting] = [
 
 let package = Package(
     name: "GruffixToasts",
-    platforms: [.iOS("17.0")],
+    platforms: [.iOS("17.0"), .macOS("14.0"), .tvOS("17.0"), .watchOS("10.0")],
     products: [
         .library(name: "GruffixToasts", targets: ["GruffixToasts"]),
     ],
