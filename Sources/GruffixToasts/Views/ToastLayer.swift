@@ -91,6 +91,11 @@ struct ToastLayer: View {
             Button("Dismiss") { center.dismiss(toast.id) }
         }
         .swipeToDismiss(toast.id)
+        .background {
+            GeometryReader { proxy in
+                Color.clear.preference(key: ToastFramesKey.self, value: [proxy.frame(in: .global)])
+            }
+        }
         .transition(style.transition(from: tuning.placement))
     }
 

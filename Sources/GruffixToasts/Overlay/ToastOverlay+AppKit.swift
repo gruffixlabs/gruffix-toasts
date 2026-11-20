@@ -73,8 +73,8 @@ final class ToastOverlay {
     private weak var parent: NSWindow?
     private var center: ToastCenter?
     private var appearance: ToastOverlayAppearance?
-    /// The toasts' frame in the panel's content view, which is flipped like SwiftUI's.
-    private var toastFrame: CGRect = .zero
+    /// Each toast's frame in the panel's content view, which is flipped like SwiftUI's.
+    private var toastFrames: [CGRect] = []
     private var resizeTask: Task<Void, Never>?
 
     func attach(to window: NSWindow?) {
@@ -127,7 +127,7 @@ final class ToastOverlay {
         }
         let screenPoint = parent.convertPoint(toScreen: location)
         let point = contentView.convert(panel.convertPoint(fromScreen: screenPoint), from: nil)
-        panel.ignoresMouseEvents = !toastFrame.contains(point)
+        panel.ignoresMouseEvents = !toastFrames.contains { $0.contains(point) }
     }
 
     /// Covers the parent's content area, below its title bar and toolbar.
@@ -147,8 +147,8 @@ final class ToastOverlay {
     private func rootView() -> AnyView {
         guard let center, let appearance else { return AnyView(EmptyView()) }
         return AnyView(
-            ToastOverlayRoot(center: center, appearance: appearance) { [weak self] frame in
-                self?.toastFrame = frame
+            ToastOverlayRoot(center: center, appearance: appearance) { [weak self] frames in
+                self?.toastFrames = frames
             }
         )
     }

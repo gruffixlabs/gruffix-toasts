@@ -94,8 +94,8 @@ final class ToastOverlay {
     private func rootView() -> AnyView {
         guard let center, let appearance else { return AnyView(EmptyView()) }
         return AnyView(
-            ToastOverlayRoot(center: center, appearance: appearance) { [weak self] frame in
-                self?.window?.toastFrame = frame
+            ToastOverlayRoot(center: center, appearance: appearance) { [weak self] frames in
+                self?.window?.toastFrames = frames
             }
         )
     }
@@ -105,13 +105,13 @@ final class ToastOverlay {
 /// keyboard and every other touch stay with the app.
 final class ToastOverlayWindow: UIWindow {
     weak var toastCenter: ToastCenter?
-    var toastFrame: CGRect = .zero
+    var toastFrames: [CGRect] = []
 
     override var canBecomeKey: Bool { false }
 
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         guard let toastCenter, !toastCenter.visible.isEmpty else { return false }
-        return toastFrame.contains(point)
+        return toastFrames.contains { $0.contains(point) }
     }
 }
 #endif
