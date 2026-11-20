@@ -11,7 +11,12 @@ public final class ToastTuning {
     /// Whether toasts stack or queue. Defaults to the style's preferred presentation.
     public var presentation: ToastPresentation
     /// The most toasts on screen at once in stack presentation. Showing another dismisses the oldest.
+    /// Defaults to 3, or 1 on watchOS, where the screen fits one toast.
+    #if os(watchOS)
+    public var maxVisible = 1
+    #else
     public var maxVisible = 3
+    #endif
 
     /// Seconds an info toast stays on screen.
     public var infoSeconds = 3.0
@@ -22,6 +27,9 @@ public final class ToastTuning {
     /// Seconds an error toast stays on screen when `isErrorSticky` is `false`.
     public var errorSeconds = 6.0
     /// Whether error toasts stay on screen, with a close button, until dismissed.
+    ///
+    /// Ignored on tvOS, where every toast times out: a toast never takes focus there, so its
+    /// close button couldn't be reached.
     public var isErrorSticky = true
     /// Extra seconds given to toasts with an action so there's a chance to tap it.
     public var actionBonusSeconds = 2.0
@@ -64,7 +72,9 @@ public final class ToastTuning {
         case .success: base = successSeconds
         case .warning: base = warningSeconds
         case .error:
+            #if !os(tvOS)
             if isErrorSticky { return nil }
+            #endif
             base = errorSeconds
         }
         return toast.action == nil ? base : base + actionBonusSeconds

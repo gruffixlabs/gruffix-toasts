@@ -10,6 +10,9 @@ struct ToastHostModifier: ViewModifier {
             .overlay(alignment: center.tuning.placement.alignment) {
                 ToastLayer(center: center)
             }
+            #if os(tvOS)
+            .modifier(ToastAlertModifier(center: center))
+            #endif
             .environment(\.hostedToastCenter, center)
     }
 }
