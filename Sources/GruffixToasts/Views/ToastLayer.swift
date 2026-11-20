@@ -6,7 +6,7 @@ struct ToastLayer: View {
     @State private var isDeckExpanded = false
 
     private var tuning: ToastTuning { center.tuning }
-    private var style: ToastStyle { tuning.style.rendered }
+    private var style: any ToastStyle { tuning.style }
 
     /// Newest toast sits closest to the screen edge.
     private var ordered: [Toast] {
@@ -29,14 +29,14 @@ struct ToastLayer: View {
 
     @ViewBuilder
     private var content: some View {
-        switch style {
-        case .glassCapsule:
+        switch style.layout {
+        case .glassStack:
             if #available(iOS 26, macOS 26, tvOS 26, watchOS 26, *) {
                 GlassEffectContainer(spacing: ToastMetrics.scaled(12)) { stack }
             } else {
                 stack
             }
-        case .banner, .snackbar:
+        case .stack:
             stack
         case .deck:
             deck
@@ -77,9 +77,11 @@ struct ToastLayer: View {
     }
 
     private func row(for toast: Toast) -> some View {
-        style.view(for: toast, showsClose: tuning.seconds(for: toast) == nil) {
-            center.dismiss(toast.id)
-        }
+        style.erasedBody(configuration: ToastStyleConfiguration(
+            toast: toast,
+            showsCloseButton: tuning.seconds(for: toast) == nil,
+            dismiss: { center.dismiss(toast.id) }
+        ))
         .accessibilityElement(children: .combine)
         .accessibilityActions {
             if let action = toast.action {
@@ -96,7 +98,7 @@ struct ToastLayer: View {
                 Color.clear.preference(key: ToastFramesKey.self, value: [proxy.frame(in: .global)])
             }
         }
-        .transition(style.transition(from: tuning.placement))
+        .transition(style.transition(for: tuning.placement))
     }
 
     /// 0 for the newest toast, counting up toward the oldest.

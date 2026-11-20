@@ -16,8 +16,8 @@ struct ToastTuningPanel: View {
     var body: some View {
         Form {
             Section("Look") {
-                Picker("Style", selection: $tuning.style) {
-                    ForEach(ToastStyle.allCases, id: \.self) { Text($0.displayName) }
+                Picker("Style", selection: style) {
+                    ForEach(DemoToastStyle.allCases, id: \.self) { Text($0.displayName) }
                 }
                 Picker("Placement", selection: $tuning.placement) {
                     ForEach(ToastPlacement.allCases, id: \.self) { Text($0.displayName) }
@@ -64,10 +64,17 @@ struct ToastTuningPanel: View {
                 }
             }
         }
-        .onChange(of: tuning.style) { _, style in
+    }
+
+    /// `ToastStyle` is a protocol, not `Hashable`, so the picker selects from the demo's list.
+    private var style: Binding<DemoToastStyle> {
+        Binding {
+            DemoToastStyle(matching: tuning.style) ?? .glassCapsule
+        } set: { selection in
+            tuning.style = selection.style
             // A fresh tuning carries the library's defaults for the style, so the panel can't
             // drift from them.
-            let defaults = ToastTuning(style: style)
+            let defaults = ToastTuning(style: selection.style)
             tuning.placement = defaults.placement
             tuning.presentation = defaults.presentation
         }

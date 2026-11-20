@@ -1,5 +1,31 @@
 import SwiftUI
 
+/// A compact dark bar. Defaults to the bottom edge, queued.
+public struct SnackbarToastStyle: BuiltInToastStyle {
+    var builtInLayout: ToastStyleLayout { .stack }
+
+    /// Defaults to ``ToastPlacement/bottom``.
+    public var defaultPlacement: ToastPlacement { .bottom }
+
+    /// Defaults to ``ToastPresentation/queue``.
+    public var defaultPresentation: ToastPresentation { .queue }
+
+    /// Draws the toast as a snackbar.
+    public func makeBody(configuration: Configuration) -> some View {
+        SnackbarToast(toast: configuration.toast, showsClose: configuration.showsCloseButton, dismiss: configuration.dismiss)
+    }
+
+    /// Grows slightly while fading.
+    public func transition(for placement: ToastPlacement) -> AnyTransition {
+        .scale(scale: 0.9, anchor: placement.anchor).combined(with: .opacity)
+    }
+}
+
+extension ToastStyle where Self == SnackbarToastStyle {
+    /// A compact dark bar. Defaults to the bottom edge, queued.
+    public static var snackbar: Self { SnackbarToastStyle() }
+}
+
 /// Dark, Material-style snackbar with an inline text action. Always dark so it reads the same
 /// over light and dark content.
 struct SnackbarToast: View {
@@ -9,7 +35,7 @@ struct SnackbarToast: View {
 
     var body: some View {
         HStack(spacing: ToastMetrics.scaled(12)) {
-            Image(systemName: toast.severity.symbol)
+            Image(systemName: toast.severity.systemImage)
                 .foregroundStyle(toast.severity.tint)
 
             VStack(alignment: .leading, spacing: ToastMetrics.scaled(2)) {

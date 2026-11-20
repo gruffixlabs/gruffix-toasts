@@ -12,7 +12,7 @@ GruffixToasts shows short, transient messages, such as "Document saved" or "Coul
 toasts.success("Document saved", detail: "Quarterly Report")
 ```
 
-Toasts come in four styles, stack or queue, dismiss themselves after a duration set by their severity, and announce themselves to VoiceOver. The same API works on every platform; the library adapts the behavior to each one, as described in <doc:PlatformDifferences>.
+Toasts come in four built-in styles, or one of your own, stack or queue, dismiss themselves after a duration set by their severity, and announce themselves to VoiceOver. The same API works on every platform; the library adapts the behavior to each one, as described in <doc:PlatformDifferences>.
 
 ## Topics
 
@@ -33,9 +33,21 @@ Toasts come in four styles, stack or queue, dismiss themselves after a duration 
 
 - ``ToastTuning``
 - ``ToastStyle``
+- ``GlassCapsuleToastStyle``
+- ``BannerToastStyle``
+- ``SnackbarToastStyle``
+- ``DeckToastStyle``
 - ``ToastPlacement``
 - ``ToastPresentation``
 - ``SpringPreset``
+
+### Custom styles
+
+- <doc:CreatingACustomStyle>
+- ``ToastStyleConfiguration``
+- ``ToastCloseButton``
+- ``SwiftUICore/View/toastGlass(tint:isInteractive:in:)``
+- ``SwiftUICore/View/toastGlassButtonStyle(isProminent:)``
 
 ### Platforms
 

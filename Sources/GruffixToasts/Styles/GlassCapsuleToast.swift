@@ -1,5 +1,29 @@
 import SwiftUI
 
+/// A compact capsule with Liquid Glass on iOS 26 and later, or a tinted material before. Defaults
+/// to the top edge, stacked.
+public struct GlassCapsuleToastStyle: BuiltInToastStyle {
+    var builtInLayout: ToastStyleLayout { .glassStack }
+
+    /// Draws the toast as a glass capsule.
+    public func makeBody(configuration: Configuration) -> some View {
+        GlassCapsuleToast(toast: configuration.toast, showsClose: configuration.showsCloseButton, dismiss: configuration.dismiss)
+    }
+
+    /// Moves in from the toast's edge while growing and fading.
+    public func transition(for placement: ToastPlacement) -> AnyTransition {
+        .move(edge: placement.edge)
+            .combined(with: .scale(scale: 0.6, anchor: placement.anchor))
+            .combined(with: .opacity)
+    }
+}
+
+extension ToastStyle where Self == GlassCapsuleToastStyle {
+    /// A compact capsule with Liquid Glass on iOS 26 and later, or a tinted material before.
+    /// Defaults to the top edge, stacked.
+    public static var glassCapsule: Self { GlassCapsuleToastStyle() }
+}
+
 /// Compact Liquid Glass capsule, meant to sit just below the Dynamic Island. Before iOS 26 it's
 /// a tinted material capsule instead.
 ///
@@ -47,7 +71,7 @@ struct GlassCapsuleToast: View {
     }
 
     private var icon: some View {
-        Image(systemName: toast.severity.symbol)
+        Image(systemName: toast.severity.systemImage)
             .font(.title3)
             .foregroundStyle(toast.severity.tint)
     }

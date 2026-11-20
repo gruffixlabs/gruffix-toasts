@@ -60,7 +60,9 @@ public enum ToastSeverity: CaseIterable, Hashable {
     /// Something failed. By default, errors stay on screen until dismissed.
     case error
 
-    var symbol: String {
+    /// The name of the SF Symbol the built-in styles show for this severity, for use with
+    /// `Image(systemName:)` in a custom ``ToastStyle``.
+    public var systemImage: String {
         switch self {
         case .info: "info.circle.fill"
         case .success: "checkmark.circle.fill"
@@ -69,7 +71,8 @@ public enum ToastSeverity: CaseIterable, Hashable {
         }
     }
 
-    var tint: Color {
+    /// The color the built-in styles tint this severity's icon, background and action button.
+    public var tint: Color {
         switch self {
         case .info: .blue
         case .success: .green

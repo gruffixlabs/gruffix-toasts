@@ -67,13 +67,16 @@ struct ToastCenterPlatformTests {
     #endif
 
     #if os(watchOS)
-    @Test(arguments: ToastStyle.allCases)
-    func everyStyleDefaultsToOneBottomToastQueued(_ style: ToastStyle) {
-        let tuning = ToastTuning(style: style)
+    @Test func everyStyleDefaultsToOneBottomToastQueued() {
+        let styles: [any ToastStyle] = [.glassCapsule, .banner, .snackbar, .deck]
 
-        #expect(tuning.placement == .bottom)
-        #expect(tuning.presentation == .queue)
-        #expect(tuning.maxVisible == 1)
+        for style in styles {
+            let tuning = ToastTuning(style: style)
+
+            #expect(tuning.placement == .bottom)
+            #expect(tuning.presentation == .queue)
+            #expect(tuning.maxVisible == 1)
+        }
     }
 
     @Test func explicitSettingsWin() {
@@ -86,8 +89,8 @@ struct ToastCenterPlatformTests {
         #expect(center.visible.map(\.id) == toasts.map(\.id))
     }
 
-    @Test func deckIsDrawnAsCapsule() {
-        #expect(ToastStyle.deck.rendered == .glassCapsule)
+    @Test func deckIsLaidOutAsCapsules() {
+        #expect(DeckToastStyle().layout == GlassCapsuleToastStyle().layout)
     }
     #else
     @Test func stylesKeepTheirDefaults() {
@@ -95,7 +98,7 @@ struct ToastCenterPlatformTests {
         #expect(ToastTuning(style: .snackbar).presentation == .queue)
         #expect(ToastTuning(style: .deck).placement == .bottom)
         #expect(ToastTuning().maxVisible == 3)
-        #expect(ToastStyle.deck.rendered == .deck)
+        #expect(DeckToastStyle().layout == .deck)
     }
     #endif
 }

@@ -1,5 +1,20 @@
 import SwiftUI
 
+/// A full-width card with a tinted leading stripe. Defaults to the top edge, stacked.
+public struct BannerToastStyle: BuiltInToastStyle {
+    var builtInLayout: ToastStyleLayout { .stack }
+
+    /// Draws the toast as a banner.
+    public func makeBody(configuration: Configuration) -> some View {
+        BannerToast(toast: configuration.toast, showsClose: configuration.showsCloseButton, dismiss: configuration.dismiss)
+    }
+}
+
+extension ToastStyle where Self == BannerToastStyle {
+    /// A full-width card with a tinted leading stripe. Defaults to the top edge, stacked.
+    public static var banner: Self { BannerToastStyle() }
+}
+
 /// Full-width card with a tinted leading stripe; reads as a system-style alert banner.
 struct BannerToast: View {
     let toast: Toast
@@ -8,7 +23,7 @@ struct BannerToast: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: ToastMetrics.scaled(12)) {
-            Image(systemName: toast.severity.symbol)
+            Image(systemName: toast.severity.systemImage)
                 .font(.title2)
                 .foregroundStyle(toast.severity.tint)
 
