@@ -51,8 +51,19 @@ struct DeckToastCard: View {
     let toast: Toast
     let showsClose: Bool
     let dismiss: () -> Void
+    @Environment(\.isCoveredInDeck) private var isCovered
 
     var body: some View {
+        content
+            // The glass is translucent, so a covered card's text would show through the card in
+            // front. Covered cards keep only their background, which is what peeks out.
+            .opacity(isCovered ? 0 : 1)
+            .padding(ToastMetrics.scaled(12))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .toastGlass(tint: nil, isInteractive: false, in: .rect(cornerRadius: ToastMetrics.scaled(22)))
+    }
+
+    private var content: some View {
         HStack(spacing: ToastMetrics.scaled(12)) {
             Image(systemName: toast.severity.systemImage)
                 .font(.title3)
@@ -90,10 +101,12 @@ struct DeckToastCard: View {
                 ToastCloseButton(action: dismiss)
             }
         }
-        .padding(ToastMetrics.scaled(12))
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .toastGlass(tint: nil, isInteractive: false, in: .rect(cornerRadius: ToastMetrics.scaled(22)))
     }
+}
+
+extension EnvironmentValues {
+    /// Whether a deck card sits behind another in a collapsed deck. Set by `ToastLayer`.
+    @Entry var isCoveredInDeck = false
 }
 
 #if DEBUG

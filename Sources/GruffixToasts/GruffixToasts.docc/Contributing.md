@@ -42,6 +42,8 @@ Build this documentation with:
 xcodebuild docbuild -scheme GruffixToasts -destination 'generic/platform=iOS Simulator'
 ```
 
+Every change to `Sources/` on `main` publishes it to GitHub Pages at <https://gruffixlabs.github.io/gruffix-toasts/>. The workflow is `.github/workflows/docs.yml`.
+
 ### Try the demo app
 
 Open `Demo/ToastsDemo.xcodeproj` and run the `ToastsDemo` scheme on iOS or macOS. The playground fires sample toasts, opens a sheet to show toasts above a presentation, and has a tuning panel that edits ``ToastTuning`` live. Its previews compare styles and states.

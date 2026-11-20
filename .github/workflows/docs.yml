@@ -1,0 +1,76 @@
+name: Docs
+
+# Publishes the DocC catalog and the symbol documentation to GitHub Pages whenever `main` changes them.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Sources/**'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deployment at a time. A queued run waits rather than cancelling one mid-deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    # Pages is enabled when the repo goes public. Until then, skip rather than build a site that can't deploy.
+    # Skipping this job also skips Deploy, which needs it.
+    if: ${{ github.event.repository.visibility == 'public' }}
+    runs-on: xcode-27
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pin Xcode so the runner image's default can't change the toolchain under us.
+      - name: Select Xcode 27.2
+        run: sudo xcode-select --switch /Applications/Xcode_27.2.app
+
+      - name: Build documentation
+        run: >
+          xcodebuild docbuild -scheme GruffixToasts
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath .build/docbuild
+
+      # The site is served from https://gruffixlabs.github.io/gruffix-toasts/, so every link needs that base path.
+      - name: Transform for static hosting
+        run: >
+          xcrun docc process-archive transform-for-static-hosting
+          .build/docbuild/Build/Products/Debug-iphonesimulator/GruffixToasts.doccarchive
+          --output-path .build/site
+          --hosting-base-path gruffix-toasts
+
+      # The transform leaves a root index.html that ignores the base path, so send the site root to the landing page.
+      - name: Redirect the site root
+        run: |
+          cat > .build/site/index.html <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>GruffixToasts</title>
+          <meta http-equiv="refresh" content="0; url=documentation/gruffixtoasts/">
+          <a href="documentation/gruffixtoasts/">GruffixToasts documentation</a>
+          EOF
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .build/site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}documentation/gruffixtoasts/
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
