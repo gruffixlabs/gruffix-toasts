@@ -15,7 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - A demo app in `Demo/` for iOS and macOS, with the playground and tuning panel.
 - Documentation: a landing page, Getting Started, Platform Differences and Contributing articles in the DocC catalog.
 - Custom toast styles: conform to `ToastStyle`, implement `makeBody(configuration:)`, and set the style on `ToastTuning.style`. Custom styles get stacking, queueing, timers, swipe to dismiss, haptics, VoiceOver support and the overlay window, and can set their own default placement, presentation and transition. Documented in the "Creating a Custom Style" article.
-- `ToastStyleConfiguration`, and the built-in style types `GlassCapsuleToastStyle`, `BannerToastStyle`, `SnackbarToastStyle` and `DeckToastStyle`.
+- `ToastStyleConfiguration`, with a public initializer for previewing custom styles, and the built-in style types `GlassCapsuleToastStyle`, `BannerToastStyle`, `SnackbarToastStyle` and `DeckToastStyle`.
 - Building blocks for matching the built-in look: `ToastSeverity.systemImage` and `tint`, `ToastCloseButton`, and the `View` modifiers `toastGlass(tint:isInteractive:in:)` and `toastGlassButtonStyle(isProminent:)`.
 
 ### Removed

@@ -80,6 +80,20 @@ These are the pieces the built-in styles are made from:
 
 Haptics for each severity play for every style, so a style doesn't need to play them.
 
+### Preview a style
+
+Create a ``ToastStyleConfiguration`` to see your style in Xcode Previews without a toast center:
+
+```swift
+#Preview {
+    VStack(spacing: 12) {
+        TicketToastStyle().makeBody(configuration: .init(toast: Toast(.success, "Document saved")))
+        TicketToastStyle().makeBody(configuration: .init(toast: Toast(.error, "Couldn't save"), showsCloseButton: true))
+    }
+    .padding()
+}
+```
+
 ### Layout of several toasts
 
 A style draws one toast at a time. Custom styles stack their toasts vertically, newest closest to the edge. The pile-and-expand layout of ``ToastStyle/deck`` is reserved to that built-in style.

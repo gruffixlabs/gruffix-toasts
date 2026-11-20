@@ -36,6 +36,15 @@ struct CustomToastStyleTests {
         #endif
     }
 
+    @Test func previewConfigurationDefaultsToNoCloseButton() {
+        let toast = Toast(.info, "Saved")
+
+        let configuration = ToastStyleConfiguration(toast: toast)
+
+        #expect(configuration.toast.id == toast.id)
+        #expect(!configuration.showsCloseButton)
+    }
+
     // MARK: Center
 
     @Test func queueDefaultShowsOneToastAtATime() {

@@ -76,6 +76,25 @@ public struct ToastStyleConfiguration {
     public let showsCloseButton: Bool
     /// Removes the toast. Call it from a close button, or after running the toast's action.
     public let dismiss: () -> Void
+
+    /// Creates a configuration, such as for previewing a custom style:
+    ///
+    /// ```swift
+    /// #Preview {
+    ///     TicketToastStyle().makeBody(configuration: .init(toast: Toast(.error, "Couldn't save"), showsCloseButton: true))
+    /// }
+    /// ```
+    ///
+    /// The library creates configurations itself when it draws toasts.
+    /// - Parameters:
+    ///   - toast: The toast to draw.
+    ///   - showsCloseButton: Whether to show a close button.
+    ///   - dismiss: The work to do when the toast is dismissed. Defaults to doing nothing.
+    public init(toast: Toast, showsCloseButton: Bool = false, dismiss: @escaping () -> Void = {}) {
+        self.toast = toast
+        self.showsCloseButton = showsCloseButton
+        self.dismiss = dismiss
+    }
 }
 
 /// How several toasts are arranged on screen.

@@ -64,3 +64,17 @@ private struct TicketToast: View {
         .toastGlass(tint: toast.severity.tint.opacity(0.08), isInteractive: false, in: .rect(cornerRadius: 12))
     }
 }
+
+#if DEBUG
+#Preview {
+    // Scrolls so each toast keeps its natural height.
+    ScrollView {
+        VStack(spacing: 12) {
+            ForEach(ToastSamples.allSeverities) { toast in
+                TicketToastStyle().makeBody(configuration: .init(toast: toast, showsCloseButton: toast.severity == .error))
+            }
+        }
+        .padding()
+    }
+}
+#endif
