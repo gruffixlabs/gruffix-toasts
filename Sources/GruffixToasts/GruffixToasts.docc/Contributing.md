@@ -34,6 +34,8 @@ xcodebuild test -scheme GruffixToasts -destination 'platform=iOS Simulator,name=
 
 Some tests run only on the platform whose behavior they cover, so test counts differ between platforms.
 
+Continuous integration runs these tests on iOS, macOS, tvOS and watchOS with Xcode 27 for every pull request and every push to `main`. The workflow is `.github/workflows/ci.yml`.
+
 Build this documentation with:
 
 ```sh
