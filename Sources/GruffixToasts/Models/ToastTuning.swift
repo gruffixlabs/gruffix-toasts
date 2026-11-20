@@ -4,8 +4,9 @@ import SwiftUI
 /// take effect live.
 @Observable
 public final class ToastTuning {
-    /// The visual style of every toast.
-    public var style: ToastStyle
+    /// The visual style of every toast: a built-in style such as ``ToastStyle/glassCapsule``, or
+    /// your own ``ToastStyle``.
+    public var style: any ToastStyle
     /// The screen edge toasts appear at. Defaults to the style's preferred edge.
     public var placement: ToastPlacement
     /// Whether toasts stack or queue. Defaults to the style's preferred presentation.
@@ -56,12 +57,18 @@ public final class ToastTuning {
         }
     }
 
-    /// Creates tuning for a style, using that style's default placement and presentation.
+    /// Creates tuning for a style, using that style's default placement and presentation. On
+    /// watchOS, whose screen fits one toast, every style starts at the bottom edge, queued.
     /// - Parameter style: The visual style of every toast.
-    public init(style: ToastStyle = .glassCapsule) {
+    public init(style: any ToastStyle = .glassCapsule) {
         self.style = style
+        #if os(watchOS)
+        placement = .bottom
+        presentation = .queue
+        #else
         placement = style.defaultPlacement
         presentation = style.defaultPresentation
+        #endif
     }
 
     /// Seconds before `toast` auto-dismisses, or `nil` if it stays until dismissed.

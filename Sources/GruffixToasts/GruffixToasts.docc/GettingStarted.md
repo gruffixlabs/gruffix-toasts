@@ -105,6 +105,9 @@ tuning.springPreset = .bouncy
 
 Errors stay on screen with a close button until dismissed, unless you turn off ``ToastTuning/isErrorSticky``. In stack presentation, ``ToastTuning/maxVisible`` caps how many toasts are on screen at once.
 
+To draw toasts your own way, see <doc:CreatingACustomStyle>.
+
 ## See Also
 
+- <doc:CreatingACustomStyle>
 - <doc:PlatformDifferences>

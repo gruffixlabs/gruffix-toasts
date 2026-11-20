@@ -9,7 +9,7 @@ struct ToastPlayground: View {
     @State private var showDocumentSheet = false
     private let showsTuningPanel: Bool
 
-    init(style: ToastStyle = .glassCapsule, showsTuningPanel: Bool = false) {
+    init(style: any ToastStyle = .glassCapsule, showsTuningPanel: Bool = false) {
         _center = State(initialValue: ToastCenter(tuning: ToastTuning(style: style)))
         self.showsTuningPanel = showsTuningPanel
     }
@@ -39,7 +39,7 @@ struct ToastPlayground: View {
                     }
                 }
             }
-            .navigationTitle(center.tuning.style.displayName)
+            .navigationTitle(DemoToastStyle(matching: center.tuning.style)?.displayName ?? "Toasts")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Dismiss All", systemImage: "xmark.circle") { center.dismissAll() }

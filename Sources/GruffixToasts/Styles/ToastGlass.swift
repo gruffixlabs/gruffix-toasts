@@ -57,11 +57,20 @@ struct ToastGlassButtonModifier: ViewModifier {
 }
 
 extension View {
-    func toastGlass(tint: Color?, isInteractive: Bool, in shape: some Shape) -> some View {
+    /// Puts the built-in styles' glass background behind a view: Liquid Glass on OS 26 and later,
+    /// and a tinted `.regularMaterial` in the same shape before that.
+    /// - Parameters:
+    ///   - tint: A color to tint the glass with, or `nil` for untinted glass.
+    ///   - isInteractive: Whether the glass reacts to touches on OS 26 and later.
+    ///   - shape: The shape of the background.
+    public func toastGlass(tint: Color?, isInteractive: Bool, in shape: some Shape) -> some View {
         modifier(ToastGlassBackground(tint: tint, isInteractive: isInteractive, shape: shape))
     }
 
-    func toastGlassButtonStyle(isProminent: Bool) -> some View {
+    /// Gives a button the built-in styles' look: the glass button styles on OS 26 and later, and
+    /// their bordered counterparts before that.
+    /// - Parameter isProminent: Whether to use the prominent variant, as for a toast's action.
+    public func toastGlassButtonStyle(isProminent: Bool) -> some View {
         modifier(ToastGlassButtonModifier(isProminent: isProminent))
     }
 }

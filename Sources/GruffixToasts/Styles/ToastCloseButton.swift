@@ -1,10 +1,20 @@
 import SwiftUI
 
-/// Shown on toasts that won't time out, so dismissal doesn't depend on discovering the swipe.
-struct ToastCloseButton: View {
+/// The close button the built-in styles show on toasts that won't time out, so dismissal doesn't
+/// depend on discovering the swipe. Show it in a custom ``ToastStyle`` when
+/// ``ToastStyleConfiguration/showsCloseButton`` is `true`.
+public struct ToastCloseButton: View {
     let action: () -> Void
 
-    var body: some View {
+    /// Creates a close button.
+    /// - Parameter action: The work to do when the button is tapped, usually
+    ///   ``ToastStyleConfiguration/dismiss``.
+    public init(action: @escaping () -> Void) {
+        self.action = action
+    }
+
+    /// The button.
+    public var body: some View {
         Button("Dismiss", systemImage: "xmark", action: action)
             .labelStyle(.iconOnly)
             .font(.caption.weight(.bold))

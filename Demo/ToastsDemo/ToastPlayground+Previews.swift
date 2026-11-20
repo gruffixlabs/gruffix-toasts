@@ -20,6 +20,10 @@ import GruffixToasts
     ToastPlayground(style: .deck)
 }
 
+#Preview("Ticket (custom)") {
+    ToastPlayground(style: .ticket)
+}
+
 #Preview("Workbench", traits: .landscapeLeft) {
     ToastPlayground(style: .glassCapsule, showsTuningPanel: true)
 }
@@ -31,7 +35,7 @@ private struct ToastStatePreview: View {
     @State private var center: ToastCenter
     private let toasts: [Toast]
 
-    init(style: ToastStyle, toasts: [Toast], configure: (ToastTuning) -> Void = { _ in }) {
+    init(style: any ToastStyle, toasts: [Toast], configure: (ToastTuning) -> Void = { _ in }) {
         let tuning = ToastTuning(style: style)
         configure(tuning)
         _center = State(initialValue: ToastCenter(tuning: tuning))
@@ -43,7 +47,7 @@ private struct ToastStatePreview: View {
             List(1...12, id: \.self) { item in
                 Text("Item \(item)")
             }
-            .navigationTitle(center.tuning.style.displayName)
+            .navigationTitle(DemoToastStyle(matching: center.tuning.style)?.displayName ?? "Toasts")
         }
         .toastHost(center)
         .task { center.show(toasts) }
