@@ -8,12 +8,12 @@ struct GlassCapsuleToast: View {
     let dismiss: () -> Void
 
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: ToastMetrics.scaled(10)) {
             Image(systemName: toast.severity.symbol)
                 .font(.title3)
                 .foregroundStyle(toast.severity.tint)
 
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading, spacing: ToastMetrics.scaled(1)) {
                 Text(toast.text)
                     .font(.subheadline.weight(.semibold))
                 if let detail = toast.detail {
@@ -38,9 +38,9 @@ struct GlassCapsuleToast: View {
                 ToastCloseButton(action: dismiss)
             }
         }
-        .padding(.vertical, 10)
-        .padding(.leading, 16)
-        .padding(.trailing, showsClose || toast.action != nil ? 8 : 18)
+        .padding(.vertical, ToastMetrics.scaled(10))
+        .padding(.leading, ToastMetrics.scaled(16))
+        .padding(.trailing, ToastMetrics.scaled(showsClose || toast.action != nil ? 8 : 18))
         .toastGlass(tint: toast.severity.tint.opacity(0.12), isInteractive: true, in: .capsule)
     }
 }

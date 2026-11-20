@@ -9,7 +9,7 @@ struct ToastCloseButton: View {
             .labelStyle(.iconOnly)
             .font(.caption.weight(.bold))
             .foregroundStyle(.secondary)
-            .frame(width: 28, height: 28)
+            .frame(width: ToastMetrics.scaled(28), height: ToastMetrics.scaled(28))
             .contentShape(.rect)
     }
 }
