@@ -41,13 +41,19 @@ import SwiftUI
 
 @main
 struct MyApp: App {
-    @State private var toasts = ToastCenter(tuning: ToastTuning(style: .glassCapsule))
-
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .toastHost(toasts)
+            RootView()
         }
+    }
+}
+
+struct RootView: View {
+    @State private var toasts = ToastCenter(tuning: ToastTuning(style: .glassCapsule))
+
+    var body: some View {
+        ContentView()
+            .toastHost(toasts)
     }
 }
 ```

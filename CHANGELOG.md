@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-20
+
 ### Added
 
+- Released under the MIT License.
 - `ToastCenter.info(_:detail:action:)`, `success(_:detail:action:)`, `warning(_:detail:action:)` and `error(_:detail:action:)` show a toast of that severity without building a `Toast`. Each returns the toast's identifier for dismissing it early.
 - `ToastCenter.error(_:detail:action:)` also accepts an `Error`, using its localized description as the text and its recovery suggestion, if any, as the detail.
 - `EnvironmentValues.toastCenter`, read with `@Environment(\.toastCenter)`. It stops with a message naming `.toastHost(_:)` when no host is installed.
@@ -32,3 +35,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Toasts appear above sheets, full-screen covers and popovers on iOS, macOS and tvOS. They draw in a window above the host's, which passes every touch and click outside the toasts through to the app. On watchOS they still draw over the host's content.
 - On tvOS, toasts never take focus, so every toast times out and `isErrorSticky` is ignored. A toast with an action shows as an alert with the action and Cancel instead, one at a time. The deck doesn't expand, and spacing is larger.
 - On watchOS, toasts default to one at a time, queued, at the bottom; explicit tuning still applies. A tap dismisses a toast, there's no swipe, and the Deck style draws as the Glass Capsule.
+
+[Unreleased]: https://github.com/gruffixlabs/gruffix-toasts/compare/0.1.0...HEAD
+[0.1.0]: https://github.com/gruffixlabs/gruffix-toasts/releases/tag/0.1.0
