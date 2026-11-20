@@ -29,18 +29,12 @@ jobs:
       matrix:
         include:
           - platform: iOS
-            device: iPhone 17
-            runtime: iOS-27-2
             destination: platform=iOS Simulator,name=iPhone 17,OS=27.2
           - platform: macOS
             destination: platform=macOS
           - platform: tvOS
-            device: Apple TV 4K (4th generation)
-            runtime: tvOS-27-2
             destination: platform=tvOS Simulator,name=Apple TV 4K (4th generation),OS=27.2
           - platform: watchOS
-            device: Apple Watch Series 12 (46mm)
-            runtime: watchOS-27-2
             destination: platform=watchOS Simulator,name=Apple Watch Series 12 (46mm),OS=27.2
     steps:
       - uses: actions/checkout@v7
@@ -52,22 +46,6 @@ jobs:
       - name: Show toolchain
         run: xcodebuild -version
 
-      # `simctl boot` returns once the boot starts, so the simulator finishes booting while the
-      # build runs instead of after it. Booting dominates the iOS job's time.
-      - name: Boot simulator
-        if: ${{ matrix.device }}
-        run: |
-          udid=$(xcrun simctl list devices available -j \
-            | jq -r --arg runtime "com.apple.CoreSimulator.SimRuntime.${{ matrix.runtime }}" --arg name "${{ matrix.device }}" \
-              '.devices[$runtime][]? | select(.name == $name) | .udid' | head -n 1)
-          if [ -z "$udid" ]; then
-            echo "::error::No ${{ matrix.device }} simulator for ${{ matrix.runtime }}"
-            exit 1
-          fi
-          xcrun simctl boot "$udid"
-
-      - name: Build for testing
-        run: xcodebuild build-for-testing -scheme GruffixToasts -destination '${{ matrix.destination }}'
-
-      - name: Test
-        run: xcodebuild test-without-building -scheme GruffixToasts -destination '${{ matrix.destination }}'
+      # `xcodebuild test` builds the library and test target for the destination first.
+      - name: Build and test
+        run: xcodebuild test -scheme GruffixToasts -destination '${{ matrix.destination }}'
