@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Liquid Glass behind a toast on iOS 26 and later. Earlier systems have no glass, so they get
+/// Liquid Glass behind a toast on OS 26 and later. Earlier systems have no glass, so they get
 /// a material with the same tint in the same shape, keeping the layout identical.
 struct ToastGlassBackground<S: Shape>: ViewModifier {
     let tint: Color?
@@ -8,7 +8,7 @@ struct ToastGlassBackground<S: Shape>: ViewModifier {
     let shape: S
 
     func body(content: Content) -> some View {
-        if #available(iOS 26, *) {
+        if #available(iOS 26, macOS 26, tvOS 26, watchOS 26, *) {
             content.glassEffect(glass, in: shape)
         } else {
             content.background {
@@ -22,7 +22,7 @@ struct ToastGlassBackground<S: Shape>: ViewModifier {
         }
     }
 
-    @available(iOS 26, *)
+    @available(iOS 26, macOS 26, tvOS 26, watchOS 26, *)
     private var glass: Glass {
         var glass = Glass.regular
         if let tint {
@@ -35,12 +35,12 @@ struct ToastGlassBackground<S: Shape>: ViewModifier {
     }
 }
 
-/// The glass button styles on iOS 26 and later, and their bordered counterparts before that.
+/// The glass button styles on OS 26 and later, and their bordered counterparts before that.
 struct ToastGlassButtonModifier: ViewModifier {
     let isProminent: Bool
 
     func body(content: Content) -> some View {
-        if #available(iOS 26, *) {
+        if #available(iOS 26, macOS 26, tvOS 26, watchOS 26, *) {
             if isProminent {
                 content.buttonStyle(.glassProminent)
             } else {

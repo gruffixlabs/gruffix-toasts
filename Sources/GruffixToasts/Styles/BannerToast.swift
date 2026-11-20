@@ -7,12 +7,12 @@ struct BannerToast: View {
     let dismiss: () -> Void
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: ToastMetrics.scaled(12)) {
             Image(systemName: toast.severity.symbol)
                 .font(.title2)
                 .foregroundStyle(toast.severity.tint)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: ToastMetrics.scaled(2)) {
                 Text(toast.text)
                     .font(.headline)
                 if let detail = toast.detail {
@@ -28,7 +28,7 @@ struct BannerToast: View {
                     .font(.subheadline.weight(.semibold))
                     .buttonStyle(.bordered)
                     .tint(toast.severity.tint)
-                    .padding(.top, 6)
+                    .padding(.top, ToastMetrics.scaled(6))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -37,20 +37,20 @@ struct BannerToast: View {
                 ToastCloseButton(action: dismiss)
             }
         }
-        .padding(14)
-        .padding(.leading, 4)
+        .padding(ToastMetrics.scaled(14))
+        .padding(.leading, ToastMetrics.scaled(4))
         .background {
             // Stripe lives inside the card's shape so the rounded corners trim it.
-            RoundedRectangle(cornerRadius: 18)
+            RoundedRectangle(cornerRadius: ToastMetrics.scaled(18))
                 .fill(.background)
                 .overlay(alignment: .leading) {
                     Rectangle()
                         .fill(toast.severity.tint)
-                        .frame(width: 5)
+                        .frame(width: ToastMetrics.scaled(5))
                 }
-                .mask(RoundedRectangle(cornerRadius: 18))
+                .mask(RoundedRectangle(cornerRadius: ToastMetrics.scaled(18)))
         }
-        .shadow(color: .black.opacity(0.15), radius: 12, y: 4)
+        .shadow(color: .black.opacity(0.15), radius: ToastMetrics.scaled(12), y: ToastMetrics.scaled(4))
     }
 }
 

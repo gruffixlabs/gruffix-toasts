@@ -8,6 +8,9 @@ public final class ToastCenter {
     private(set) var pending: [Toast] = []
     /// The most recently presented toast; drives haptics without re-firing when older toasts leave.
     private(set) var lastShown: Toast?
+    /// Toasts with an action, waiting to be shown one at a time as alerts. Only tvOS fills it: a
+    /// toast there never takes focus, so its button couldn't be reached.
+    private(set) var alerts: [Toast] = []
     /// How toasts look, move and time out.
     public let tuning: ToastTuning
     /// Suspends for a duration. Injected so tests can drive timers without waiting in real time.
@@ -29,7 +32,17 @@ public final class ToastCenter {
     /// Shows a toast. In stack presentation it appears at once, dismissing the oldest toast
     /// when more than `ToastTuning.maxVisible` are on screen. In queue presentation it waits
     /// until the toasts ahead of it have been dismissed.
+    ///
+    /// On tvOS a toast with an action is shown as an alert instead, with the action and a
+    /// Cancel button. Alerts wait for each other, not for toasts, and stay until a button is chosen.
     public func show(_ toast: Toast) {
+        #if os(tvOS)
+        if toast.action != nil {
+            alerts.append(toast)
+            AccessibilityNotification.Announcement(toast.text).post()
+            return
+        }
+        #endif
         switch tuning.presentation {
         case .stack:
             present(toast)
@@ -132,6 +145,7 @@ public final class ToastCenter {
         timers[id] = nil
         pending.removeAll { $0.id == id }
         visible.removeAll { $0.id == id }
+        alerts.removeAll { $0.id == id }
         if visible.isEmpty && !pending.isEmpty {
             presentNextQueued()
         }
@@ -143,6 +157,7 @@ public final class ToastCenter {
         timers.removeAll()
         pending.removeAll()
         visible.removeAll()
+        alerts.removeAll()
     }
 
     /// Stops the auto-dismiss timer, for example while the toast is being dragged.

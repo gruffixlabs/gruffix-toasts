@@ -30,7 +30,7 @@ struct ToastCenterConvenienceTests {
         var didPerform = false
         show(severity, "Text", detail: "Detail", action: ToastAction(label: "Undo") { didPerform = true })
 
-        let toast = try #require(center.visible.only)
+        let toast = try #require(presented.only)
         #expect(toast.detail == "Detail")
         let action = try #require(toast.action)
         #expect(action.label == "Undo")
@@ -58,7 +58,7 @@ struct ToastCenterConvenienceTests {
     @Test func errorDetailReplacesRecoverySuggestion() throws {
         center.error(SampleError(), detail: "Try again later.", action: ToastAction(label: "Retry") {})
 
-        let toast = try #require(center.visible.only)
+        let toast = try #require(presented.only)
         #expect(toast.detail == "Try again later.")
         #expect(toast.action?.label == "Retry")
     }
@@ -70,6 +70,11 @@ struct ToastCenterConvenienceTests {
         let toast = try #require(center.visible.only)
         #expect(toast.text == error.localizedDescription)
         #expect(toast.detail == nil)
+    }
+
+    /// Toasts on screen or, on tvOS, waiting as alerts because they have an action.
+    private var presented: [Toast] {
+        center.visible + center.alerts
     }
 
     @discardableResult

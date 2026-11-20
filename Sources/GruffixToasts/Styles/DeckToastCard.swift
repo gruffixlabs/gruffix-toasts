@@ -7,14 +7,14 @@ struct DeckToastCard: View {
     let dismiss: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: ToastMetrics.scaled(12)) {
             Image(systemName: toast.severity.symbol)
                 .font(.title3)
                 .foregroundStyle(.white)
-                .frame(width: 38, height: 38)
-                .background(toast.severity.tint.gradient, in: .rect(cornerRadius: 10))
+                .frame(width: ToastMetrics.scaled(38), height: ToastMetrics.scaled(38))
+                .background(toast.severity.tint.gradient, in: .rect(cornerRadius: ToastMetrics.scaled(10)))
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: ToastMetrics.scaled(2)) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(toast.text)
                         .font(.subheadline.weight(.semibold))
@@ -44,9 +44,9 @@ struct DeckToastCard: View {
                 ToastCloseButton(action: dismiss)
             }
         }
-        .padding(12)
+        .padding(ToastMetrics.scaled(12))
         .frame(maxWidth: .infinity, alignment: .leading)
-        .toastGlass(tint: nil, isInteractive: false, in: .rect(cornerRadius: 22))
+        .toastGlass(tint: nil, isInteractive: false, in: .rect(cornerRadius: ToastMetrics.scaled(22)))
     }
 }
 

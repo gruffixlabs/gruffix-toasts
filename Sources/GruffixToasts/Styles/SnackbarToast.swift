@@ -8,11 +8,11 @@ struct SnackbarToast: View {
     let dismiss: () -> Void
 
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: ToastMetrics.scaled(12)) {
             Image(systemName: toast.severity.symbol)
                 .foregroundStyle(toast.severity.tint)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: ToastMetrics.scaled(2)) {
                 Text(toast.text)
                     .font(.subheadline.weight(.medium))
                 if let detail = toast.detail {
@@ -36,10 +36,10 @@ struct SnackbarToast: View {
                 ToastCloseButton(action: dismiss)
             }
         }
-        .padding(.vertical, 12)
-        .padding(.horizontal, 16)
-        .background(Color(white: 0.16), in: .rect(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.25), radius: 8, y: 3)
+        .padding(.vertical, ToastMetrics.scaled(12))
+        .padding(.horizontal, ToastMetrics.scaled(16))
+        .background(Color(white: 0.16), in: .rect(cornerRadius: ToastMetrics.scaled(12)))
+        .shadow(color: .black.opacity(0.25), radius: ToastMetrics.scaled(8), y: ToastMetrics.scaled(3))
         .environment(\.colorScheme, .dark)
     }
 }

@@ -1,32 +1,33 @@
 import SwiftUI
+import GruffixToasts
 
 /// A form of live controls for `ToastTuning`, for trying styles, timing and motion in a debug
 /// screen or sheet.
-public struct ToastTuningPanel: View {
+struct ToastTuningPanel: View {
     @Bindable var tuning: ToastTuning
 
     /// Creates a panel that edits `tuning` in place.
     /// - Parameter tuning: The tuning to edit, usually the `ToastCenter`'s.
-    public init(tuning: ToastTuning) {
+    init(tuning: ToastTuning) {
         self.tuning = tuning
     }
 
     /// The panel's form.
-    public var body: some View {
+    var body: some View {
         Form {
             Section("Look") {
                 Picker("Style", selection: $tuning.style) {
-                    ForEach(ToastStyle.allCases, id: \.self) { Text($0.name) }
+                    ForEach(ToastStyle.allCases, id: \.self) { Text($0.displayName) }
                 }
                 Picker("Placement", selection: $tuning.placement) {
-                    ForEach(ToastPlacement.allCases, id: \.self) { Text($0.name) }
+                    ForEach(ToastPlacement.allCases, id: \.self) { Text($0.displayName) }
                 }
                 .pickerStyle(.segmented)
             }
 
             Section("Presentation") {
                 Picker("Mode", selection: $tuning.presentation) {
-                    ForEach(ToastPresentation.allCases, id: \.self) { Text($0.name) }
+                    ForEach(ToastPresentation.allCases, id: \.self) { Text($0.displayName) }
                 }
                 .pickerStyle(.segmented)
                 Stepper("Max visible: \(tuning.maxVisible)", value: $tuning.maxVisible, in: 1...6)
@@ -48,7 +49,7 @@ public struct ToastTuningPanel: View {
 
             Section("Motion") {
                 Picker("Spring", selection: $tuning.springPreset) {
-                    ForEach(SpringPreset.allCases, id: \.self) { Text($0.name) }
+                    ForEach(SpringPreset.allCases, id: \.self) { Text($0.displayName) }
                 }
                 .pickerStyle(.segmented)
                 if tuning.springPreset == .custom {
@@ -64,7 +65,11 @@ public struct ToastTuningPanel: View {
             }
         }
         .onChange(of: tuning.style) { _, style in
-            tuning.applyDefaults(for: style)
+            // A fresh tuning carries the library's defaults for the style, so the panel can't
+            // drift from them.
+            let defaults = ToastTuning(style: style)
+            tuning.placement = defaults.placement
+            tuning.presentation = defaults.presentation
         }
     }
 

@@ -2,6 +2,10 @@ import SwiftUI
 
 /// Drag a toast toward its edge, or sideways, to dismiss it. The timer pauses while dragging,
 /// and dragging away from the edge is rubber-banded.
+///
+/// On watchOS a drag would fight scrolling, the Digital Crown and swipe-back navigation, so a
+/// tap dismisses instead. tvOS has no drag gesture and its toasts always time out, so there's
+/// nothing to add.
 struct SwipeToDismissModifier: ViewModifier {
     let toastId: Toast.ID
     @Environment(\.toastCenter) private var center
@@ -9,11 +13,19 @@ struct SwipeToDismissModifier: ViewModifier {
     @State private var isDragging = false
 
     func body(content: Content) -> some View {
+        #if os(tvOS)
+        content
+        #elseif os(watchOS)
+        content
+            .onTapGesture { center.dismiss(toastId) }
+        #else
         content
             .offset(offset)
             .gesture(drag)
+        #endif
     }
 
+    #if !os(tvOS) && !os(watchOS)
     private var drag: some Gesture {
         DragGesture(minimumDistance: 8)
             .onChanged { value in
@@ -48,6 +60,7 @@ struct SwipeToDismissModifier: ViewModifier {
         let threshold = center.tuning.swipeThreshold
         return towardEdge(translation) > threshold || abs(translation.width) > threshold * 2
     }
+    #endif
 }
 
 extension View {

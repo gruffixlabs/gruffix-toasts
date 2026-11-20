@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// How toasts look. Each style has a default placement and presentation, which
-/// `ToastTuning` can override.
+/// `ToastTuning` can override. On watchOS every style defaults to the bottom edge, queued, since
+/// the screen fits one toast.
 public enum ToastStyle: CaseIterable, Hashable {
     /// A compact capsule with Liquid Glass on iOS 26 and later, or a tinted material before.
     /// Defaults to the top edge, stacked.
@@ -12,29 +13,40 @@ public enum ToastStyle: CaseIterable, Hashable {
     case snackbar
     /// Cards that pile up behind the newest and expand into a list when tapped. Defaults to the
     /// bottom edge, stacked.
+    ///
+    /// On tvOS the deck doesn't expand. On watchOS, which has no room for a pile, it's drawn as
+    /// ``glassCapsule``.
     case deck
 
-    var name: String {
-        switch self {
-        case .glassCapsule: "Glass Capsule"
-        case .banner: "Banner"
-        case .snackbar: "Snackbar"
-        case .deck: "Deck"
-        }
+    /// The style actually drawn on this platform.
+    var rendered: ToastStyle {
+        #if os(watchOS)
+        self == .deck ? .glassCapsule : self
+        #else
+        self
+        #endif
     }
 
     var defaultPlacement: ToastPlacement {
+        #if os(watchOS)
+        return .bottom
+        #else
         switch self {
         case .glassCapsule, .banner: .top
         case .snackbar, .deck: .bottom
         }
+        #endif
     }
 
     var defaultPresentation: ToastPresentation {
+        #if os(watchOS)
+        return .queue
+        #else
         switch self {
         case .snackbar: .queue
         case .glassCapsule, .banner, .deck: .stack
         }
+        #endif
     }
 
     func transition(from placement: ToastPlacement) -> AnyTransition {

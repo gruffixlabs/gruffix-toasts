@@ -1,5 +1,6 @@
 #if DEBUG
 import SwiftUI
+import GruffixToasts
 
 // MARK: - Variations
 
@@ -42,7 +43,7 @@ private struct ToastStatePreview: View {
             List(1...12, id: \.self) { item in
                 Text("Item \(item)")
             }
-            .navigationTitle(center.tuning.style.name)
+            .navigationTitle(center.tuning.style.displayName)
         }
         .toastHost(center)
         .task { center.show(toasts) }

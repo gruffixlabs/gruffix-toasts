@@ -8,7 +8,9 @@ struct ToastCenterTimingTests {
     let center: ToastCenter
 
     init() {
+        // Explicit, so watchOS's one-toast queue default doesn't change what these tests measure.
         tuning.presentation = .stack
+        tuning.maxVisible = 3
         center = ToastCenter(tuning: tuning, sleep: sleeper.sleep(for:))
     }
 
@@ -29,6 +31,8 @@ struct ToastCenterTimingTests {
         await expectAutoDismissal(of: toast, after: .seconds(seconds))
     }
 
+    // tvOS shows toasts with an action as alerts; ToastCenterPlatformTests covers that.
+    #if !os(tvOS)
     @Test func actionAddsBonusTime() async {
         let toast = Toast(.info, "Toast", action: ToastAction(label: "Undo") {})
 
@@ -47,6 +51,7 @@ struct ToastCenterTimingTests {
         #expect(center.visible.map(\.id) == [toast.id])
         #expect(sleeper.pendingCount == 0)
     }
+    #endif
 
     @Test func autoDismissInQueuePresentsNextAfterGap() async {
         tuning.presentation = .queue
@@ -129,6 +134,7 @@ struct ToastCenterTimingTests {
         await expectAutoDismissal(of: toast, after: .seconds(1.5))
     }
 
+    #if !os(tvOS)
     @Test func customActionBonusApplies() async {
         tuning.successSeconds = 1
         tuning.actionBonusSeconds = 4
@@ -138,6 +144,7 @@ struct ToastCenterTimingTests {
 
         await expectAutoDismissal(of: toast, after: .seconds(5))
     }
+    #endif
 
     @Test func customQueueGapApplies() async {
         tuning.presentation = .queue

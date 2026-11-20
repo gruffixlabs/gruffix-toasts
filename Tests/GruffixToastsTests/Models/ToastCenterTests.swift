@@ -8,6 +8,8 @@ struct ToastCenterTests {
     let center: ToastCenter
 
     init() {
+        // Explicit, so watchOS's one-visible default doesn't change what these tests measure.
+        tuning.maxVisible = 3
         center = ToastCenter(tuning: tuning, sleep: sleeper.sleep(for:))
     }
 

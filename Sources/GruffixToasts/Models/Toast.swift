@@ -29,6 +29,9 @@ public struct Toast: Identifiable {
 }
 
 /// A single button offered on a toast, such as Retry or Undo. The toast dismisses after it runs.
+///
+/// On tvOS, where a toast can't take focus, a toast with an action shows as an alert instead,
+/// with this button beside Cancel.
 public struct ToastAction {
     /// The button's title.
     public let label: String
@@ -46,7 +49,7 @@ public struct ToastAction {
 }
 
 /// How important a toast is. Severity sets the toast's icon, tint, haptic and how long it stays
-/// on screen.
+/// on screen. Haptics play on iOS and watchOS; macOS and tvOS have none to play.
 public enum ToastSeverity: CaseIterable, Hashable {
     /// Neutral information.
     case info

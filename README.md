@@ -1,7 +1,7 @@
 # GruffixToasts
 
-App-wide toast messages for SwiftUI on iOS 17 and later, with four styles (Glass Capsule, Banner, Snackbar, Deck), stack or
-queue presentation, swipe to dismiss, haptics and VoiceOver announcements.
+App-wide toast messages for SwiftUI on iOS 17, macOS 14, tvOS 17 and watchOS 10 and later, with four styles (Glass
+Capsule, Banner, Snackbar, Deck), stack or queue presentation, swipe to dismiss, haptics and VoiceOver announcements.
 
 ## Usage
 
@@ -29,9 +29,10 @@ toasts.error(error, action: ToastAction(label: "Retry") { save() })
 
 `info`, `success`, `warning` and `error` each have a shortcut; `show(_:)` takes a `Toast` you build yourself.
 
-`ToastTuning` controls style, placement, durations and motion. `ToastTuningPanel` edits it live.
+`ToastTuning` controls style, placement, durations and motion.
 
 ## Demo
 
-`Sources/GruffixToasts/Demo` holds debug-only sample toasts and a playground. Open `Package.swift` in Xcode and use the
-`#Preview`s in `ToastPlayground+Previews.swift` to compare styles and states.
+`Demo/` holds a playground app for iOS and macOS that uses the package from this checkout. Open
+`Demo/ToastsDemo.xcodeproj` and run it, or use the `#Preview`s in `ToastPlayground+Previews.swift` to compare
+styles and states. The tuning panel there edits `ToastTuning` live.
