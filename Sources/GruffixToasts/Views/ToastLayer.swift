@@ -60,6 +60,7 @@ struct ToastLayer: View {
             ForEach(ordered) { toast in
                 let depth = depth(of: toast)
                 row(for: toast)
+                    .environment(\.isCoveredInDeck, !isDeckExpanded && depth > 0)
                     .scaleEffect(isDeckExpanded ? 1 : 1 - CGFloat(depth) * 0.05, anchor: tuning.placement.anchor)
                     .offset(y: isDeckExpanded ? 0 : deckPeek(depth))
                     .opacity(isDeckExpanded || depth < 3 ? 1 : 0)
