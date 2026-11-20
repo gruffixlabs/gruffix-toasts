@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `EnvironmentValues.toastCenter`, read with `@Environment(\.toastCenter)`. It stops with a message naming `.toastHost(_:)` when no host is installed.
 - macOS 14, tvOS 17 and watchOS 10 support, with the same API as iOS.
 - A demo app in `Demo/` for iOS and macOS, with the playground and tuning panel.
+- Documentation: a landing page, Getting Started, Platform Differences and Contributing articles in the DocC catalog.
 
 ### Removed
 
