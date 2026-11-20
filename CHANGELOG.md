@@ -36,5 +36,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - On tvOS, toasts never take focus, so every toast times out and `isErrorSticky` is ignored. A toast with an action shows as an alert with the action and Cancel instead, one at a time. The deck doesn't expand, and spacing is larger.
 - On watchOS, toasts default to one at a time, queued, at the bottom; explicit tuning still applies. A tap dismisses a toast, there's no swipe, and the Deck style draws as the Glass Capsule.
 
-[Unreleased]: https://github.com/gruffixlabs/gruffix-toasts/compare/0.1.0...HEAD
-[0.1.0]: https://github.com/gruffixlabs/gruffix-toasts/releases/tag/0.1.0
+[Unreleased]: https://github.com/gruffixlabs/gruffix-toasts/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/gruffixlabs/gruffix-toasts/releases/tag/v0.1.0
