@@ -1,10 +1,15 @@
 name: CI
 
-# Pull requests only: every change reaches `main` through one, so a run after the merge would repeat it.
+# Pull requests, plus `main` after each merge, so `main` is checked against changes that landed alongside it.
+# Both skip runs when only documentation changes.
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    # Skip runs when only documentation changes.
+    paths-ignore:
+      - '**/*.md'
+      - 'Sources/GruffixToasts/GruffixToasts.docc/**'
+  push:
+    branches: [main]
     paths-ignore:
       - '**/*.md'
       - 'Sources/GruffixToasts/GruffixToasts.docc/**'

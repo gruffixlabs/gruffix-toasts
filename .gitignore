@@ -10,3 +10,5 @@ build/
 *.dSYM
 CLAUDE.local.md
 *.xcresult
+.claude
+
