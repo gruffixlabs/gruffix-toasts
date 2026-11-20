@@ -1,0 +1,51 @@
+name: CI
+
+# Pull requests only: every change reaches `main` through one, so a run after the merge would repeat it.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    # Skip runs when only documentation changes.
+    paths-ignore:
+      - '**/*.md'
+      - 'Sources/GruffixToasts/GruffixToasts.docc/**'
+
+permissions:
+  contents: read
+
+# A newer push to the same branch or pull request cancels the run in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: ${{ matrix.platform }}
+    # Draft pull requests don't run CI; marking one ready for review does.
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: xcode-27
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: iOS
+            destination: platform=iOS Simulator,name=iPhone 17,OS=27.2
+          - platform: macOS
+            destination: platform=macOS
+          - platform: tvOS
+            destination: platform=tvOS Simulator,name=Apple TV 4K (4th generation),OS=27.2
+          - platform: watchOS
+            destination: platform=watchOS Simulator,name=Apple Watch Series 12 (46mm),OS=27.2
+    steps:
+      - uses: actions/checkout@v7
+
+      # Pin Xcode so the runner image's default can't change the toolchain under us.
+      - name: Select Xcode 27.2
+        run: sudo xcode-select --switch /Applications/Xcode_27.2.app
+
+      - name: Show toolchain
+        run: xcodebuild -version
+
+      # `xcodebuild test` builds the library and test target for the destination first.
+      - name: Build and test
+        run: xcodebuild test -scheme GruffixToasts -destination '${{ matrix.destination }}'
