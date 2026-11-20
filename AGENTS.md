@@ -12,10 +12,10 @@
 
 ## Project baseline
 
-- This is a Swift package that ships the `GruffixToasts` library. There is no Xcode project. Source lives in `Sources/GruffixToasts/`, tests in `Tests/GruffixToastsTests/`.
+- This is a Swift package that ships the `GruffixToasts` library. Source lives in `Sources/GruffixToasts/`, tests in `Tests/GruffixToastsTests/`. `Demo/ToastsDemo.xcodeproj` is a demo app for iOS and macOS that uses the package from this checkout; it isn't part of the library.
 - Swift tools 6.2, Swift 6 language mode with complete strict concurrency checking.
 - Target Swift settings in `Package.swift`: default `MainActor` isolation, `NonisolatedNonsendingByDefault` and `InferIsolatedConformances`. Code is written against these; don't work around them.
-- Minimum deployment targets: iOS 17.0.
+- Minimum deployment targets: iOS 17.0, macOS 14.0, tvOS 17.0, watchOS 10.0.
 - Do not use APIs unavailable on these targets without an availability check.
 
 ## Hard rules
@@ -46,10 +46,11 @@ Pick the mode from the task. If unclear, use the lightest plausible mode and sta
 2. **Structural** (moving code between targets or packages, writing tests): build all affected targets and run the relevant tests. New tests must run; report failures as findings.
 3. **Feature** (delegated stories): full build and test suite, plus a list of manual checks for anything not automated. Done when it meets the Definition of done below.
 
-Build and test with `xcodebuild` against iOS, not `swift build` or `swift test`, which target the host Mac and fail for this iOS-only package:
+Build and test with `xcodebuild` on every supported platform, not `swift build` or `swift test`, which cover only the host Mac:
 
-- Build: `xcodebuild build -scheme GruffixToasts -destination 'generic/platform=iOS Simulator'`
-- Test: `xcodebuild test -scheme GruffixToasts -destination 'platform=iOS Simulator,name=<device>'`, using an available iOS 27 simulator from `xcrun simctl list devices available`.
+- Build: `xcodebuild build -scheme GruffixToasts -destination 'generic/platform=<iOS Simulator | macOS | tvOS Simulator | watchOS Simulator>'`
+- Test: `xcodebuild test -scheme GruffixToasts -destination '<destination>'`, with `platform=macOS` or `platform=<iOS | tvOS | watchOS> Simulator,name=<device>` for an available OS 27 simulator from `xcrun simctl list devices available`.
+- Demo app: `xcodebuild build -project Demo/ToastsDemo.xcodeproj -scheme ToastsDemo -configuration Debug -destination 'generic/platform=<iOS Simulator | macOS>'`. It shares the library's `#if DEBUG` sample toasts, so it builds only in Debug.
 
 If a task grows beyond its mode (shared code, public APIs, many files), stop and ask whether to continue, move to a stricter mode, or reduce scope.
 
