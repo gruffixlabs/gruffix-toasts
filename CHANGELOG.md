@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `EnvironmentValues.toastCenter`, read with `@Environment(\.toastCenter)`. It stops with a message naming `.toastHost(_:)` when no host is installed.
 - macOS 14, tvOS 17 and watchOS 10 support, with the same API as iOS.
 - A demo app in `Demo/` for iOS and macOS, with the playground and tuning panel.
-- Documentation: a landing page, Getting Started, Platform Differences and Contributing articles in the DocC catalog.
+- Documentation: a landing page, Getting Started, Platform Differences and Contributing articles in the DocC catalog, published at <https://gruffixlabs.github.io/gruffix-toasts/>.
 - Custom toast styles: conform to `ToastStyle`, implement `makeBody(configuration:)`, and set the style on `ToastTuning.style`. Custom styles get stacking, queueing, timers, swipe to dismiss, haptics, VoiceOver support and the overlay window, and can set their own default placement, presentation and transition. Documented in the "Creating a Custom Style" article.
 - `ToastStyleConfiguration`, with a public initializer for previewing custom styles, and the built-in style types `GlassCapsuleToastStyle`, `BannerToastStyle`, `SnackbarToastStyle` and `DeckToastStyle`.
 - Building blocks for matching the built-in look: `ToastSeverity.systemImage` and `tint`, `ToastCloseButton`, and the `View` modifiers `toastGlass(tint:isInteractive:in:)` and `toastGlassButtonStyle(isProminent:)`.
