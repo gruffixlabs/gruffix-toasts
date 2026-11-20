@@ -34,5 +34,5 @@ toasts.error(error, action: ToastAction(label: "Retry") { save() })
 ## Demo
 
 `Demo/` holds a playground app for iOS and macOS that uses the package from this checkout. Open
-`Demo/GruffixToastsDemo.xcodeproj` and run it, or use the `#Preview`s in `ToastPlayground+Previews.swift` to compare
+`Demo/ToastsDemo.xcodeproj` and run it, or use the `#Preview`s in `ToastPlayground+Previews.swift` to compare
 styles and states. The tuning panel there edits `ToastTuning` live.

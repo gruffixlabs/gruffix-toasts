@@ -6,6 +6,7 @@ import GruffixToasts
 struct ToastPlayground: View {
     @State private var center: ToastCenter
     @State private var showTuningSheet = false
+    @State private var showDocumentSheet = false
     private let showsTuningPanel: Bool
 
     init(style: ToastStyle = .glassCapsule, showsTuningPanel: Bool = false) {
@@ -29,6 +30,9 @@ struct ToastPlayground: View {
         NavigationStack {
             List {
                 ToastTriggerSection()
+                Section("Presentations") {
+                    Button("Open a sheet") { showDocumentSheet = true }
+                }
                 Section("Documents") {
                     ForEach(Self.documents, id: \.self) { document in
                         Label(document, systemImage: "doc.text")
@@ -45,6 +49,14 @@ struct ToastPlayground: View {
                         Button("Tune", systemImage: "slider.horizontal.3") { showTuningSheet = true }
                     }
                 }
+            }
+            .sheet(isPresented: $showDocumentSheet) {
+                // Toasts fired from here should appear above the sheet.
+                NavigationStack {
+                    List { ToastTriggerSection() }
+                        .navigationTitle("Sheet")
+                }
+                .presentationDetents([.medium, .large])
             }
             .sheet(isPresented: $showTuningSheet) {
                 ToastTuningPanel(tuning: center.tuning)
